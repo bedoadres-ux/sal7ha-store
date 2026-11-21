@@ -20,7 +20,6 @@
             .responsive-table thead { display: none; }
             .responsive-table tbody { display: block; width: 100%; }
             
-            /* شكل الكارت */
             .responsive-table tr {
                 display: flex;
                 flex-direction: column;
@@ -32,7 +31,6 @@
                 position: relative;
             }
 
-            /* الجزء العلوي: الصورة والاسم والسعر */
             .responsive-table td[data-label="الصنف"] {
                 display: flex;
                 flex-direction: row;
@@ -41,30 +39,37 @@
                 padding-bottom: 0.5rem;
                 border-bottom: 1px solid #f1f5f9;
                 margin-bottom: 0.5rem;
-                padding-left: 4.5rem; /* مساحة فاضية على الشمال */
+                padding-left: 4.5rem;
             }
 
-            /* إخفاء الأعمدة القديمة */
             .responsive-table td[data-label="إجمالي الشراء"],
             .responsive-table td[data-label="إجمالي البيع"],
             .responsive-table td[data-label="المتبقي"] {
                 display: none;
             }
 
-            /* الأزرار تجي تحت الاسم مباشرة */
             .responsive-table td[data-label="إجراءات"] {
                 display: flex;
                 align-items: center;
-                justify-content: flex-start; /* محاذاة لليسار */
+                justify-content: flex-start;
                 width: 100%;
                 padding: 0;
             }
             
-            /* مسافات الأزرار */
             .responsive-table td[data-label="إجراءات"] > div {
                 display: flex;
                 gap: 0.5rem;
             }
+
+            /* تنسيق كارت الموردين على الموبايل */
+            .supplier-card-mobile {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+                width: 100%;
+            }
+            .supplier-card-mobile > div { display: flex; justify-content: space-between; width: 100%; }
         }
 
         @media print {
@@ -391,6 +396,44 @@
                     <div class="flex items-center justify-between gap-3 mb-3"><h2 class="text-lg font-bold text-amber-800">تنبيهات المخزن</h2><span class="text-xs text-slate-500">الأصناف التي وصلت لحد إعادة الطلب</span></div>
                     <div id="low-stock-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
                 </section>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة تفاصيل المورد الجديدة -->
+    <div id="supplier-detail-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden items-center justify-center p-3">
+        <div class="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto p-5 shadow-2xl space-y-4">
+            <div class="flex items-center justify-between border-b pb-3">
+                <h3 class="text-lg font-extrabold text-slate-800 flex items-center gap-2"><i data-lucide="user" class="w-5 h-5 text-blue-600"></i>تفاصيل حساب: <span id="supplier-detail-name" class="text-blue-700"></span></h3>
+                <button onclick="closeSupplierDetails()" class="text-slate-500 font-bold text-sm bg-slate-100 px-3 py-1.5 rounded-lg hover:bg-slate-200">إغلاق ✕</button>
+            </div>
+            
+            <div class="grid grid-cols-3 gap-2 mb-4">
+                <div class="bg-blue-50 rounded-xl p-3 text-center border border-blue-100"><span class="text-[10px] font-bold text-blue-700 block">إجمالي البضاعة</span><span class="font-extrabold text-blue-900 font-mono" id="supplier-detail-total">0</span></div>
+                <div class="bg-emerald-50 rounded-xl p-3 text-center border border-emerald-100"><span class="text-[10px] font-bold text-emerald-700 block">إجمالي المدفوع</span><span class="font-extrabold text-emerald-900 font-mono" id="supplier-detail-paid">0</span></div>
+                <div class="bg-rose-50 rounded-xl p-3 text-center border border-rose-100"><span class="text-[10px] font-bold text-rose-700 block">إجمالي المتبقي</span><span class="font-extrabold text-rose-900 font-mono" id="supplier-detail-rem">0</span></div>
+            </div>
+
+            <!-- جدول المشتريات -->
+            <div>
+                <h4 class="font-bold text-slate-700 mb-2 text-sm flex items-center gap-1"><i data-lucide="package" class="w-4 h-4 text-indigo-500"></i> سجل المشتريات (جاب إيه؟)</h4>
+                <div class="overflow-x-auto border rounded-xl">
+                    <table class="w-full text-right text-xs">
+                        <thead class="bg-slate-50 text-slate-600 border-b"><tr><th class="p-2">التاريخ</th><th class="p-2">اسم الصنف</th><th class="p-2">الكمية</th><th class="p-2">سعر الشراء</th><th class="p-2">الإجمالي</th></tr></thead>
+                        <tbody id="supplier-purchases-body" class="divide-y divide-slate-100"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- جدول المدفوعات -->
+            <div>
+                <h4 class="font-bold text-slate-700 mb-2 text-sm flex items-center gap-1"><i data-lucide="banknote" class="w-4 h-4 text-emerald-500"></i> سجل المدفوعات (دفعت إيه؟)</h4>
+                <div class="overflow-x-auto border rounded-xl">
+                    <table class="w-full text-right text-xs">
+                        <thead class="bg-slate-50 text-slate-600 border-b"><tr><th class="p-2">التاريخ</th><th class="p-2">المبلغ المدفوع</th><th class="p-2">ملاحظات</th></tr></thead>
+                        <tbody id="supplier-payments-body" class="divide-y divide-slate-100"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -733,25 +776,126 @@
         }
 
         function renderSuppliersTab() {
-            const supMap = {}; appData.parts.forEach(p => { const sName = (p.supplier || 'مورد نقدي عام').trim(); if (!supMap[sName]) supMap[sName] = { name: sName, totalGoods: 0, totalPaid: 0 }; const cost = (Number(p.initialQty) || 0) * (Number(p.costPrice) || 0); const paid = (p.paidAmount !== undefined && p.paidAmount !== '') ? Number(p.paidAmount) : cost; supMap[sName].totalGoods += cost; supMap[sName].totalPaid += paid; });
-            appData.supplierPayments.forEach(pay => { const sName = (pay.supplier || 'مورد نقدي عام').trim(); if (!supMap[sName]) supMap[sName] = { name: sName, totalGoods: 0, totalPaid: 0 }; supMap[sName].totalPaid += Number(pay.amount || 0); });
-            let grandGoods = 0, grandPaid = 0, grandDebt = 0;
-            const summaryBody = document.getElementById('table-suppliers-summary'); const selectEl = document.getElementById('pay-supplier-name'); const currentSelect = selectEl ? selectEl.value : '';
-            if (summaryBody) summaryBody.innerHTML = ''; if (selectEl) selectEl.innerHTML = '<option value="">-- اختر المورد --</option>';
-            Object.values(supMap).forEach(s => {
-                const rem = Math.max(0, s.totalGoods - s.totalPaid); grandGoods += s.totalGoods; grandPaid += s.totalPaid; grandDebt += rem;
-                if (selectEl) { const opt = document.createElement('option'); opt.value = s.name; opt.textContent = `${s.name} (متبقي: ${formatMoney(rem)})`; selectEl.appendChild(opt); }
-                if (summaryBody) { const tr = document.createElement('tr'); tr.className = 'hover:bg-slate-50 border-b border-slate-100'; tr.innerHTML = `<td data-label="المورد" class="py-2.5 px-3 font-bold text-xs text-slate-800">${s.name}</td><td data-label="البضاعة" class="py-2.5 px-3 font-mono text-xs">${formatMoney(s.totalGoods)}</td><td data-label="المدفوع" class="py-2.5 px-3 font-mono text-xs text-emerald-600 font-bold">${formatMoney(s.totalPaid)}</td><td data-label="المتبقي" class="py-2.5 px-3 font-mono text-xs text-rose-600 font-extrabold">${formatMoney(rem)}</td><td data-label="الحالة" class="py-2.5 px-3 text-center"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${rem > 0 ? 'bg-rose-100 text-rose-700' : 'bg-emerald-100 text-emerald-700'}">${rem > 0 ? 'مستحق' : 'خالص'}</span></td>`; summaryBody.appendChild(tr); }
+            const supMap = {};
+            appData.parts.forEach(p => {
+                const sName = (p.supplier || 'مورد نقدي عام').trim();
+                if (!supMap[sName]) supMap[sName] = { name: sName, totalGoods: 0, totalPaid: 0, purchases: [], payments: [] };
+                const cost = (Number(p.initialQty) || 0) * (Number(p.costPrice) || 0);
+                const paid = (p.paidAmount !== undefined && p.paidAmount !== '') ? Number(p.paidAmount) : cost;
+                supMap[sName].totalGoods += cost;
+                supMap[sName].totalPaid += paid;
+                supMap[sName].purchases.push(p);
             });
+
+            appData.supplierPayments.forEach(pay => {
+                const sName = (pay.supplier || 'مورد نقدي عام').trim();
+                if (!supMap[sName]) supMap[sName] = { name: sName, totalGoods: 0, totalPaid: 0, purchases: [], payments: [] };
+                supMap[sName].totalPaid += Number(pay.amount || 0);
+                supMap[sName].payments.push(pay);
+            });
+
+            let grandGoods = 0, grandPaid = 0, grandDebt = 0;
+            const summaryBody = document.getElementById('table-suppliers-summary');
+            const selectEl = document.getElementById('pay-supplier-name');
+            const currentSelect = selectEl ? selectEl.value : '';
+
+            if (summaryBody) summaryBody.innerHTML = '';
+            if (selectEl) selectEl.innerHTML = '<option value="">-- اختر المورد --</option>';
+
+            Object.values(supMap).forEach(s => {
+                const rem = Math.max(0, s.totalGoods - s.totalPaid);
+                grandGoods += s.totalGoods;
+                grandPaid += s.totalPaid;
+                grandDebt += rem;
+
+                if (selectEl) {
+                    const opt = document.createElement('option');
+                    opt.value = s.name;
+                    opt.textContent = `${s.name} (متبقي: ${formatMoney(rem)})`;
+                    selectEl.appendChild(opt);
+                }
+
+                if (summaryBody) {
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-slate-50 border-b border-slate-100 cursor-pointer transition';
+                    tr.onclick = () => openSupplierDetails(s.name, supMap[s.name]);
+                    tr.innerHTML = `
+                        <td data-label="المورد" class="py-3 px-3 font-bold text-sm text-blue-700 hover:underline">${s.name}</td>
+                        <td data-label="البضاعة" class="py-3 px-3 font-mono text-xs text-slate-600">${formatMoney(s.totalGoods)}</td>
+                        <td data-label="المدفوع" class="py-3 px-3 font-mono text-xs text-emerald-600 font-bold">${formatMoney(s.totalPaid)}</td>
+                        <td data-label="المتبقي" class="py-3 px-3 font-mono text-xs text-rose-600 font-extrabold">${formatMoney(rem)}</td>
+                        <td data-label="الحالة" class="py-3 px-3 text-center">
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${rem > 0 ? 'bg-rose-100 text-rose-700' : 'bg-emerald-100 text-emerald-700'}">${rem > 0 ? 'مستحق' : 'خالص'}</span>
+                        </td>
+                    `;
+                    summaryBody.appendChild(tr);
+                }
+            });
+
             if (selectEl && currentSelect) selectEl.value = currentSelect;
-            document.getElementById('sup-total-purchases').textContent = formatMoney(grandGoods); document.getElementById('sup-total-paid').textContent = formatMoney(grandPaid); document.getElementById('sup-total-debt').textContent = formatMoney(grandDebt);
+
+            document.getElementById('sup-total-purchases').textContent = formatMoney(grandGoods);
+            document.getElementById('sup-total-paid').textContent = formatMoney(grandPaid);
+            document.getElementById('sup-total-debt').textContent = formatMoney(grandDebt);
+
             const payBody = document.getElementById('table-supplier-payments');
             if (payBody) {
                 payBody.innerHTML = '';
-                if (appData.supplierPayments.length === 0) { payBody.innerHTML = `<tr><td colspan="5" class="text-center py-6 text-slate-400">لا توجد دفعات</td></tr>`; }
-                else { [...appData.supplierPayments].sort((a, b) => parseDateForSort(b.date) - parseDateForSort(a.date)).forEach(sp => { const tr = document.createElement('tr'); tr.className = 'hover:bg-slate-50 border-b border-slate-100'; tr.innerHTML = `<td data-label="التاريخ" class="py-2.5 px-3 text-xs font-mono text-slate-600 whitespace-nowrap" dir="ltr">${formatDisplayDate(sp.date)}</td><td data-label="المورد" class="py-2.5 px-3 font-bold text-xs text-slate-800">${sp.supplier}</td><td data-label="المبلغ" class="py-2.5 px-3 font-mono text-xs font-extrabold text-emerald-600">${formatMoney(sp.amount)}</td><td data-label="ملاحظات" class="py-2.5 px-3 text-xs text-slate-500">${sp.notes || '-'}</td><td data-label="إجراء" class="py-2.5 px-3 text-center"><button onclick="deleteSupplierPayment('${sp.id}')" class="p-1.5 bg-rose-50 text-rose-600 rounded-lg"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button></td>`; payBody.appendChild(tr); }); }
+                if (appData.supplierPayments.length === 0) {
+                    payBody.innerHTML = `<tr><td colspan="5" class="text-center py-6 text-slate-400">لا توجد دفعات</td></tr>`;
+                } else {
+                    [...appData.supplierPayments].sort((a, b) => parseDateForSort(b.date) - parseDateForSort(a.date)).forEach(sp => {
+                        const tr = document.createElement('tr');
+                        tr.className = 'hover:bg-slate-50 border-b border-slate-100';
+                        tr.innerHTML = `<td data-label="التاريخ" class="py-2.5 px-3 text-xs font-mono text-slate-600 whitespace-nowrap" dir="ltr">${formatDisplayDate(sp.date)}</td><td data-label="المورد" class="py-2.5 px-3 font-bold text-xs text-slate-800">${sp.supplier}</td><td data-label="المبلغ" class="py-2.5 px-3 font-mono text-xs font-extrabold text-emerald-600">${formatMoney(sp.amount)}</td><td data-label="ملاحظات" class="py-2.5 px-3 text-xs text-slate-500">${sp.notes || '-'}</td><td data-label="إجراء" class="py-2.5 px-3 text-center"><button onclick="deleteSupplierPayment('${sp.id}')" class="p-1.5 bg-rose-50 text-rose-600 rounded-lg"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button></td>`;
+                        payBody.appendChild(tr);
+                    });
+                }
             }
             lucide.createIcons();
+        }
+
+        function openSupplierDetails(supplierName, data) {
+            document.getElementById('supplier-detail-name').textContent = supplierName;
+            document.getElementById('supplier-detail-total').textContent = formatMoney(data.totalGoods);
+            document.getElementById('supplier-detail-paid').textContent = formatMoney(data.totalPaid);
+            document.getElementById('supplier-detail-rem').textContent = formatMoney(Math.max(0, data.totalGoods - data.totalPaid));
+
+            const purchasesBody = document.getElementById('supplier-purchases-body');
+            purchasesBody.innerHTML = '';
+            if (data.purchases.length === 0) {
+                purchasesBody.innerHTML = '<tr><td colspan="5" class="p-3 text-center text-slate-400">لا توجد مشتريات</td></tr>';
+            } else {
+                data.purchases.sort((a,b) => parseDateForSort(b.date) - parseDateForSort(a.date)).forEach(p => {
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-slate-50';
+                    tr.innerHTML = `<td class="p-2 font-mono text-slate-500 whitespace-nowrap" dir="ltr">${formatDisplayDate(p.date)}</td><td class="p-2 font-bold text-slate-700">${p.name || p.partName || 'صنف'}</td><td class="p-2 font-mono text-center">${formatNumber(p.initialQty)}</td><td class="p-2 font-mono text-center">${formatMoney(p.costPrice)}</td><td class="p-2 font-mono font-bold text-indigo-600">${formatMoney(p.initialQty * p.costPrice)}</td>`;
+                    purchasesBody.appendChild(tr);
+                });
+            }
+
+            const paymentsBody = document.getElementById('supplier-payments-body');
+            paymentsBody.innerHTML = '';
+            if (data.payments.length === 0) {
+                paymentsBody.innerHTML = '<tr><td colspan="3" class="p-3 text-center text-slate-400">لا توجد دفعات مسجلة</td></tr>';
+            } else {
+                data.payments.sort((a,b) => parseDateForSort(b.date) - parseDateForSort(a.date)).forEach(pay => {
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-slate-50';
+                    tr.innerHTML = `<td class="p-2 font-mono text-slate-500 whitespace-nowrap" dir="ltr">${formatDisplayDate(pay.date)}</td><td class="p-2 font-bold text-emerald-600 font-mono">${formatMoney(pay.amount)}</td><td class="p-2 text-slate-500">${pay.notes || '-'}</td>`;
+                    paymentsBody.appendChild(tr);
+                });
+            }
+
+            const modal = document.getElementById('supplier-detail-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeSupplierDetails() {
+            const modal = document.getElementById('supplier-detail-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
         }
 
         function deleteSale(id) { const selected = appData.sales.find(s => s.id === id); if (!selected) return; const invoiceId = selected.invoiceId; showConfirmModal('حذف الفاتورة', 'هل تريد حذف الفاتورة وإرجاع الكميات للمخزن؟', () => { const records = appData.sales.filter(s => s.invoiceId === invoiceId); records.forEach(sale => { if (Array.isArray(sale.stockAllocations) && sale.stockAllocations.length) { sale.stockAllocations.forEach(a => { const part = appData.parts.find(p => p.id === a.partId); if (part) part.soldQty = Math.max(0,(Number(part.soldQty)||0)-(Number(a.qty)||0)); }); } else if (sale.partId) { const part = appData.parts.find(p => p.id === sale.partId); if (part) part.soldQty = Math.max(0,(Number(part.soldQty)||0)-(Number(sale.qty)||0)); } }); appData.sales = appData.sales.filter(s => s.invoiceId !== invoiceId); saveData(); showToast('تم الحذف', 'success'); }); }
