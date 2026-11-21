@@ -14,54 +14,15 @@
         ::-webkit-scrollbar-track { background: #f1f5f9; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-
-        /* تنسيقات الموبايل الخاصة بجدول المخزن */
         @media (max-width: 768px) {
             .responsive-table thead { display: none; }
             .responsive-table tbody { display: block; width: 100%; }
-            
-            .responsive-table tr {
-                display: flex;
-                flex-direction: column;
-                margin-bottom: 0.75rem;
-                border: 1px solid #e2e8f0;
-                border-radius: 1rem;
-                padding: 0.75rem;
-                background-color: #ffffff;
-                position: relative;
-            }
-
-            .responsive-table td[data-label="الصنف"] {
-                display: flex;
-                flex-direction: row;
-                align-items: flex-start;
-                gap: 0.5rem;
-                padding-bottom: 0.5rem;
-                border-bottom: 1px solid #f1f5f9;
-                margin-bottom: 0.5rem;
-                padding-left: 4.5rem;
-            }
-
-            .responsive-table td[data-label="إجمالي الشراء"],
-            .responsive-table td[data-label="إجمالي البيع"],
-            .responsive-table td[data-label="المتبقي"] {
-                display: none;
-            }
-
-            .responsive-table td[data-label="إجراءات"] {
-                display: flex;
-                align-items: center;
-                justify-content: flex-start;
-                width: 100%;
-                padding: 0;
-            }
-            
-            .responsive-table td[data-label="إجراءات"] > div {
-                display: flex;
-                gap: 0.5rem;
-            }
+            .responsive-table tr { display: flex; flex-direction: column; margin-bottom: 0.75rem; border: 1px solid #e2e8f0; border-radius: 1rem; padding: 0.75rem; background-color: #ffffff; position: relative; }
+            .responsive-table td[data-label="الصنف"] { display: flex; flex-direction: row; align-items: flex-start; gap: 0.5rem; padding-bottom: 0.5rem; border-bottom: 1px solid #f1f5f9; margin-bottom: 0.5rem; padding-left: 4.5rem; }
+            .responsive-table td[data-label="إجمالي الشراء"], .responsive-table td[data-label="إجمالي البيع"], .responsive-table td[data-label="المتبقي"] { display: none; }
+            .responsive-table td[data-label="إجراءات"] { display: flex; align-items: center; justify-content: flex-start; width: 100%; padding: 0; }
+            .responsive-table td[data-label="إجراءات"] > div { display: flex; gap: 0.5rem; }
         }
-
         @media print {
             body * { visibility: hidden; }
             #print-invoice-modal, #print-invoice-modal * { visibility: visible; }
@@ -74,7 +35,6 @@
 </head>
 <body class="text-slate-800 antialiased min-h-screen flex flex-col">
 
-    <!-- الشريط العلوي -->
     <header class="bg-slate-900 text-white shadow-lg sticky top-0 z-30">
         <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
             <div class="flex items-center gap-3">
@@ -101,7 +61,6 @@
         </div>
     </header>
 
-    <!-- المحتوى الرئيسي -->
     <main class="max-w-7xl w-full mx-auto px-4 py-6 flex-grow space-y-6">
 
         <!-- بطاقات الملخص المالي -->
@@ -110,6 +69,7 @@
                 <span class="text-[9px] sm:text-[11px] font-bold text-slate-500 mb-1 leading-tight">النقدية بالخزنة</span>
                 <div class="text-xs sm:text-lg font-extrabold text-blue-600 font-mono" id="dash-cash-drawer">0 ج.م</div>
                 <span class="text-[8px] sm:text-[10px] text-emerald-600 font-bold mt-0.5">صافي الربح: <span id="dash-net-profit-sub">0 ج.م</span></span>
+                <span class="text-[8px] sm:text-[10px] text-violet-600 font-bold mt-0.5">رأس المال: <span id="dash-capital-in">0 ج.م</span></span>
             </div>
             <div class="bg-white rounded-xl p-2 sm:p-3 shadow-sm border border-slate-200 flex flex-col justify-center items-center text-center">
                 <span class="text-[9px] sm:text-[11px] font-bold text-slate-500 mb-1 leading-tight">حق البضاعة</span>
@@ -125,12 +85,13 @@
         </section>
 
         <!-- شريط التبويبات -->
-        <nav class="bg-white p-1.5 rounded-2xl shadow-sm border border-slate-200 flex flex-wrap gap-1.5 overflow-x-auto">
-            <button onclick="switchTab('sales')" id="tab-btn-sales" class="tab-btn flex-1 min-w-[130px] py-3 px-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition bg-blue-600 text-white shadow-sm"><i data-lucide="shopping-cart" class="w-4 h-4"></i><span>فاتورة بيع وصيانة</span></button>
-            <button onclick="switchTab('customers')" id="tab-btn-customers" class="tab-btn flex-1 min-w-[130px] py-3 px-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition text-slate-600 hover:bg-slate-100"><i data-lucide="user-check" class="w-4 h-4"></i><span>ملفات العملاء</span></button>
-            <button onclick="switchTab('inventory')" id="tab-btn-inventory" class="tab-btn flex-1 min-w-[130px] py-3 px-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition text-slate-600 hover:bg-slate-100"><i data-lucide="boxes" class="w-4 h-4"></i><span>المشتريات والمخزن</span></button>
-            <button onclick="switchTab('suppliers')" id="tab-btn-suppliers" class="tab-btn flex-1 min-w-[130px] py-3 px-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition text-slate-600 hover:bg-slate-100"><i data-lucide="users" class="w-4 h-4"></i><span>حسابات الموردين</span></button>
-        </nav>
+<nav class="bg-white p-1.5 rounded-2xl shadow-sm border border-slate-200 flex flex-wrap gap-1.5 overflow-x-auto">
+    <button onclick="switchTab('sales')" id="tab-btn-sales" class="tab-btn flex-1 min-w-[130px] py-3 px-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition bg-blue-600 text-white shadow-sm"><i data-lucide="shopping-cart" class="w-4 h-4"></i><span>فاتورة بيع وصيانة</span></button>
+    <button onclick="switchTab('customers')" id="tab-btn-customers" class="tab-btn flex-1 min-w-[130px] py-3 px-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition text-slate-600 hover:bg-slate-100"><i data-lucide="user-check" class="w-4 h-4"></i><span>ملفات العملاء</span></button>
+    <button onclick="switchTab('inventory')" id="tab-btn-inventory" class="tab-btn flex-1 min-w-[130px] py-3 px-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition text-slate-600 hover:bg-slate-100"><i data-lucide="boxes" class="w-4 h-4"></i><span>المشتريات والمخزن</span></button>
+    <button onclick="switchTab('suppliers')" id="tab-btn-suppliers" class="tab-btn flex-1 min-w-[130px] py-3 px-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition text-slate-600 hover:bg-slate-100"><i data-lucide="users" class="w-4 h-4"></i><span>حسابات الموردين</span></button>
+    <button onclick="switchTab('expenses')" id="tab-btn-expenses" class="tab-btn flex-1 min-w-[130px] py-3 px-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition text-slate-600 hover:bg-slate-100"><i data-lucide="wallet" class="w-4 h-4"></i><span>المصاريف ورأس المال</span></button>
+</nav>
 
         <!-- تبويب 1: فاتورة بيع وصيانة -->
         <div id="tab-sales" class="tab-content grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -245,17 +206,33 @@
             </div>
         </div>
 
-        <!-- تبويب 4: المصاريف -->
-        <div id="tab-expenses" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 h-fit">
-                <h2 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2 border-b pb-3"><i data-lucide="minus-circle" class="w-5 h-5 text-rose-600"></i>تسجيل مصروف</h2>
-                <form id="form-expense" class="space-y-4">
-                    <div><label class="block text-sm font-semibold text-slate-700 mb-1">البيان *</label><input type="text" id="exp-title" placeholder="بيان المصروف" required class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm"></div>
-                    <div><label class="block text-sm font-semibold text-slate-700 mb-1">المبلغ *</label><input type="number" id="exp-amount" min="0" step="0.01" placeholder="0.00" required class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm font-mono"></div>
-                    <div><label class="block text-sm font-semibold text-slate-700 mb-1">التاريخ *</label><input type="date" id="exp-date" required class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm"></div>
-                    <button type="submit" class="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-3 px-4 rounded-xl shadow-sm transition flex items-center justify-center gap-2"><i data-lucide="save" class="w-5 h-5"></i><span>حفظ</span></button>
-                </form>
+        <!-- تبويب 4: المصاريف + إيداع رأس مال -->
+        <div id="tab-expenses" class="tab-content hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="space-y-6">
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 h-fit">
+                    <h2 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2 border-b pb-3"><i data-lucide="minus-circle" class="w-5 h-5 text-rose-600"></i>تسجيل مصروف</h2>
+                    <form id="form-expense" class="space-y-4">
+                        <div><label class="block text-sm font-semibold text-slate-700 mb-1">البيان *</label><input type="text" id="exp-title" placeholder="بيان المصروف" required class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm"></div>
+                        <div><label class="block text-sm font-semibold text-slate-700 mb-1">المبلغ *</label><input type="number" id="exp-amount" min="0" step="0.01" placeholder="0.00" required class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm font-mono"></div>
+                        <div><label class="block text-sm font-semibold text-slate-700 mb-1">التاريخ *</label><input type="date" id="exp-date" required class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm"></div>
+                        <button type="submit" class="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-3 px-4 rounded-xl shadow-sm transition flex items-center justify-center gap-2"><i data-lucide="save" class="w-5 h-5"></i><span>حفظ</span></button>
+                    </form>
+                </div>
+
+                <!-- فورم إيداع رأس المال (جديد) -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border-2 border-emerald-200 h-fit">
+                    <h2 class="text-lg font-bold text-emerald-800 mb-4 flex items-center gap-2 border-b pb-3"><i data-lucide="banknote" class="w-5 h-5 text-emerald-600"></i>إيداع رأس مال / تمويل</h2>
+                    <p class="text-[11px] text-slate-500 mb-3 -mt-2">التمويل الأولي بيتزود بيه الخزنة، ومش بيتحسب كمصروف ولا بيقلل الربح.</p>
+                    <form id="form-capital" class="space-y-4">
+                        <div><label class="block text-sm font-semibold text-slate-700 mb-1">البيان *</label><input type="text" id="cap-title" placeholder="مثال: تمويل أولي لقطع الغيار" required class="w-full rounded-xl border border-emerald-300 px-3.5 py-2.5 text-sm"></div>
+                        <div><label class="block text-sm font-semibold text-slate-700 mb-1">المبلغ *</label><input type="number" id="cap-amount" min="0.01" step="0.01" placeholder="0.00" required class="w-full rounded-xl border border-emerald-300 px-3.5 py-2.5 text-sm font-mono"></div>
+                        <div><label class="block text-sm font-semibold text-slate-700 mb-1">التاريخ *</label><input type="date" id="cap-date" required class="w-full rounded-xl border border-emerald-300 px-3.5 py-2.5 text-sm"></div>
+                        <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl shadow-sm transition flex items-center justify-center gap-2"><i data-lucide="check-circle" class="w-5 h-5"></i><span>حفظ الإيداع</span></button>
+                    </form>
+                    <div id="capital-list" class="mt-4 space-y-2 max-h-56 overflow-y-auto"></div>
+                </div>
             </div>
+
             <div class="lg:col-span-2 bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex flex-col">
                 <div class="flex items-center justify-between mb-4 border-b pb-3"><h2 class="text-lg font-bold text-slate-800 flex items-center gap-2"><i data-lucide="file-text" class="w-5 h-5 text-rose-600"></i>المصاريف</h2></div>
                 <div class="overflow-x-auto flex-grow">
@@ -269,7 +246,6 @@
 
         <!-- تبويب 5: الموردين -->
         <div id="tab-suppliers" class="tab-content hidden space-y-6">
-            <!-- تم تصغير بطاقات الموردين لتكون 3 جنب بعض زي الخزنة -->
             <div class="grid grid-cols-3 gap-2 sm:gap-3">
                 <div class="bg-white rounded-xl p-2 sm:p-3 shadow-sm border border-slate-200 flex flex-col justify-center items-center text-center">
                     <span class="text-[9px] sm:text-[11px] font-bold text-slate-500 mb-1 leading-tight">مشتريات الموردين</span>
@@ -324,7 +300,6 @@
                 <div class="flex justify-between text-xs font-semibold text-slate-700"><div>التاريخ: <span id="prn-date" class="font-mono"></span></div><div>رقم الفاتورة: <span id="prn-inv-id" class="font-mono"></span></div></div>
                 <div class="bg-slate-50 p-3 rounded-xl text-xs space-y-1 border">
                     <div>اسم العميل: <span id="prn-customer" class="font-bold"></span></div>
-                    <!-- تم إضافة كلاس hide-on-print عشان رقم الهاتف ميطبعش -->
                     <div class="hide-on-print">رقم الهاتف: <span id="prn-phone" class="font-mono"></span></div>
                 </div>
                 <div class="space-y-3 text-sm">
@@ -344,10 +319,8 @@
         </div>
     </div>
 
-    <!-- إشعار عائم -->
     <div id="toast" class="fixed bottom-5 left-5 z-50 transform translate-y-24 opacity-0 transition-all duration-300 bg-slate-900 text-white px-5 py-3.5 rounded-2xl shadow-xl flex items-center gap-3 text-sm font-semibold max-w-sm"><span id="toast-icon"></span><span id="toast-message"></span></div>
 
-    <!-- نافذة التأكيد -->
     <div id="confirm-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
             <h3 id="modal-title" class="text-lg font-extrabold text-slate-800">تأكيد الإجراء</h3><p id="modal-desc" class="text-sm text-slate-600 leading-relaxed whitespace-pre-line max-h-[55vh] overflow-y-auto"></p>
@@ -362,7 +335,6 @@
         </div>
     </div>
 
-    <!-- نافذة إعدادات السحابة واللوجو والنسخ الاحتياطي -->
     <div id="cloud-settings-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden items-center justify-center p-3">
         <div class="bg-white rounded-2xl max-w-3xl w-full max-h-[92vh] overflow-y-auto p-6 shadow-2xl space-y-4">
             <div class="flex items-center justify-between border-b pb-3"><h3 class="text-base font-extrabold text-slate-800 flex items-center gap-2"><i data-lucide="cloud-cog" class="w-5 h-5 text-blue-600"></i><span>إعدادات السحابة والنسخ الاحتياطي</span></h3><button onclick="closeCloudModal()" class="text-slate-400 hover:text-slate-600 font-bold">✕</button></div>
@@ -406,21 +378,17 @@
         </div>
     </div>
 
-    <!-- نافذة تفاصيل المورد -->
     <div id="supplier-detail-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden items-center justify-center p-3">
         <div class="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto p-5 shadow-2xl space-y-4">
             <div class="flex items-center justify-between border-b pb-3">
                 <h3 class="text-lg font-extrabold text-slate-800 flex items-center gap-2"><i data-lucide="user" class="w-5 h-5 text-blue-600"></i>تفاصيل حساب: <span id="supplier-detail-name" class="text-blue-700"></span></h3>
                 <button onclick="closeSupplierDetails()" class="text-slate-500 font-bold text-sm bg-slate-100 px-3 py-1.5 rounded-lg hover:bg-slate-200">إغلاق ✕</button>
             </div>
-            
             <div class="grid grid-cols-3 gap-2 mb-4">
                 <div class="bg-blue-50 rounded-xl p-3 text-center border border-blue-100"><span class="text-[10px] font-bold text-blue-700 block">إجمالي البضاعة</span><span class="font-extrabold text-blue-900 font-mono" id="supplier-detail-total">0</span></div>
                 <div class="bg-emerald-50 rounded-xl p-3 text-center border border-emerald-100"><span class="text-[10px] font-bold text-emerald-700 block">إجمالي المدفوع</span><span class="font-extrabold text-emerald-900 font-mono" id="supplier-detail-paid">0</span></div>
                 <div class="bg-rose-50 rounded-xl p-3 text-center border border-rose-100"><span class="text-[10px] font-bold text-rose-700 block">إجمالي المتبقي</span><span class="font-extrabold text-rose-900 font-mono" id="supplier-detail-rem">0</span></div>
             </div>
-
-            <!-- جدول المشتريات -->
             <div>
                 <h4 class="font-bold text-slate-700 mb-2 text-sm flex items-center gap-1"><i data-lucide="package" class="w-4 h-4 text-indigo-500"></i> سجل المشتريات (جاب إيه؟)</h4>
                 <div class="overflow-x-auto border rounded-xl">
@@ -430,8 +398,6 @@
                     </table>
                 </div>
             </div>
-
-            <!-- جدول المدفوعات -->
             <div>
                 <h4 class="font-bold text-slate-700 mb-2 text-sm flex items-center gap-1"><i data-lucide="banknote" class="w-4 h-4 text-emerald-500"></i> سجل المدفوعات (دفعت إيه؟)</h4>
                 <div class="overflow-x-auto border rounded-xl">
@@ -454,7 +420,7 @@
         const DEFAULT_CLOUD_URL = '';
         const CUSTOM_LOGO_KEY = 'saljha_custom_logo_v1';
 
-        let appData = { parts: [], sales: [], expenses: [], supplierPayments: [], services: [] };
+        let appData = { parts: [], sales: [], expenses: [], supplierPayments: [], services: [], capitalInjections: [] };
         let cloudSaveQueue = Promise.resolve();
         let confirmCallback = null;
         let selectedCustomerDetail = null;
@@ -489,7 +455,7 @@
 
         function stockNameKey(name) { return String(name || '').trim().toLocaleLowerCase('ar'); }
         function estimateFifoCost(group, qty) { let left=Number(qty)||0, cost=0; const lots=group.lots.slice().filter(p=>(Number(p.initialQty)||0)>(Number(p.soldQty)||0)).sort((a,b)=>parseDateForSort(a.date)-parseDateForSort(b.date)); for (const lot of lots) { if(left<=0) break; const avail=Math.max(0,(Number(lot.initialQty)||0)-(Number(lot.soldQty)||0)); const take=Math.min(left,avail); cost += take*(Number(lot.costPrice)||0); left-=take; } return cost; }
-        
+
         function getStockGroups() {
             const groups = new Map();
             (appData.parts || []).forEach(p => {
@@ -572,8 +538,8 @@
             try {
                 const response = await fetch(url); const result = await response.json(); if (!response.ok || result.status !== 'success' || !result.data) throw new Error(result.message || 'تعذر قراءة البيانات');
                 const localSnapshot = JSON.parse(JSON.stringify(appData)); const cloud = result.data;
-                const cloudHasData = ['parts','sales','expenses','supplierPayments','services'].some(k => Array.isArray(cloud[k]) && cloud[k].length);
-                const localHasData = ['parts','sales','expenses','supplierPayments','services'].some(k => Array.isArray(localSnapshot[k]) && localSnapshot[k].length);
+                const cloudHasData = ['parts','sales','expenses','supplierPayments','services','capitalInjections'].some(k => Array.isArray(cloud[k]) && cloud[k].length);
+                const localHasData = ['parts','sales','expenses','supplierPayments','services','capitalInjections'].some(k => Array.isArray(localSnapshot[k]) && localSnapshot[k].length);
                 if (!cloudHasData && localHasData) { await pushToCloud(); }
                 else {
                     const localSalesById = new Map((localSnapshot.sales || []).map(x => [String(x.id), x]));
@@ -585,7 +551,7 @@
                             serviceType: sale.serviceType || local.serviceType || '', serviceProvided: sale.serviceProvided || local.serviceProvided || ''
                         };
                     });
-                    appData.expenses = cloud.expenses || []; appData.supplierPayments = cloud.supplierPayments || []; appData.services = cloud.services || [];
+                    appData.expenses = cloud.expenses || []; appData.supplierPayments = cloud.supplierPayments || []; appData.services = cloud.services || []; appData.capitalInjections = cloud.capitalInjections || [];
                     localStorage.setItem(STORAGE_KEY, JSON.stringify(appData)); if (localSalesById.size) await pushToCloud();
                 }
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(appData)); renderAll(); if (showNotification) showToast('تمت المزامنة وتحديث البيانات بنجاح!', 'success');
@@ -615,11 +581,14 @@
             appData.supplierPayments.forEach(pay => { totalSupplierPaid += Number(pay.amount || 0); });
             let invValue = 0, invCount = 0;
             appData.parts.forEach(p => { const rem = Math.max(0, p.initialQty - p.soldQty); invCount += rem; invValue += (rem * p.costPrice); });
-            const netProfit = (totalPartsProfit + totalMaint) - totalExp; const totalIncome = totalPartsRev + totalMaint; const cashDrawer = totalIncome - totalExp - totalSupplierPaid;
+            // رأس المال: بيزود الخزنة، ومش بيأثر على الربح
+            const totalCapitalIn = (appData.capitalInjections || []).reduce((s, c) => s + Number(c.amount || 0), 0);
+            const netProfit = (totalPartsProfit + totalMaint) - totalExp; const totalIncome = totalPartsRev + totalMaint; const cashDrawer = totalIncome + totalCapitalIn - totalExp - totalSupplierPaid;
             document.getElementById('dash-cash-drawer').textContent = formatMoney(cashDrawer);
             document.getElementById('dash-net-profit-sub').textContent = formatMoney(netProfit);
             document.getElementById('dash-capital-recovered').textContent = formatMoney(totalCapitalRec);
             document.getElementById('dash-inventory-value').textContent = formatMoney(invValue);
+            document.getElementById('dash-capital-in').textContent = formatMoney(totalCapitalIn);
             document.getElementById('dash-inventory-count').textContent = formatNumber(invCount);
             document.getElementById('dash-expenses').textContent = formatMoney(totalExp);
             document.getElementById('dash-total-sales').textContent = formatMoney(totalIncome);
@@ -721,30 +690,7 @@
             groups.forEach(g => {
                 const tr = document.createElement('tr'); tr.className = 'hover:bg-slate-50 transition border-b border-slate-100 text-sm';
                 const img = g.imageData ? `<img src="${g.imageData}" class="w-11 h-11 rounded-lg object-cover border" alt="">` : '<div class="w-11 h-11 rounded-lg bg-slate-100 flex items-center justify-center text-slate-400"><i data-lucide="image" class="w-5 h-5"></i></div>';
-                
-                tr.innerHTML = `
-                    <td data-label="الصنف" class="py-2 px-3">
-                        <div class="flex items-center gap-2">
-                            ${img}
-                            <div>
-                                <div class="font-bold text-slate-800 text-base">${escapeHtml(g.name)}</div>
-                                <div class="text-xs text-slate-500 mt-1 flex gap-3">
-                                    <span>سعر الشراء: ${formatMoney(g.avgCost)}</span>
-                                    <span class="${g.remaining > 0 ? 'text-emerald-600 font-bold' : 'text-rose-600 font-bold'}">المخزن: ${formatNumber(g.remaining)}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                    <td data-label="إجمالي الشراء" class="hidden md:table-cell py-3 px-3 text-center font-mono">${formatNumber(g.purchased)}</td>
-                    <td data-label="إجمالي البيع" class="hidden md:table-cell py-3 px-3 text-center font-mono text-blue-600">${formatNumber(g.sold)}</td>
-                    <td data-label="المتبقي" class="hidden md:table-cell py-3 px-3 text-center font-mono font-extrabold ${g.remaining > 0 ? 'text-emerald-600' : 'text-rose-600'}">${formatNumber(g.remaining)}</td>
-                    <td data-label="إجراءات" class="py-3 px-3 text-center">
-                        <div class="flex items-center justify-center gap-1.5">
-                            <button type="button" onclick="addStockGroupToPurchase('${escapeAttr(g.key)}')" title="إضافة" class="w-8 h-8 inline-flex items-center justify-center rounded-lg bg-amber-100 text-amber-800 font-extrabold"><i data-lucide="plus" class="w-4 h-4"></i></button>
-                            <button type="button" onclick="showStockDetails('${escapeAttr(g.key)}')" class="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg text-xs font-bold">تفاصيل</button>
-                        </div>
-                    </td>
-                `;
+                tr.innerHTML = `<td data-label="الصنف" class="py-2 px-3"><div class="flex items-center gap-2">${img}<div><div class="font-bold text-slate-800 text-base">${escapeHtml(g.name)}</div><div class="text-xs text-slate-500 mt-1 flex gap-3"><span>سعر الشراء: ${formatMoney(g.avgCost)}</span><span class="${g.remaining > 0 ? 'text-emerald-600 font-bold' : 'text-rose-600 font-bold'}">المخزن: ${formatNumber(g.remaining)}</span></div></div></div></td><td data-label="إجمالي الشراء" class="hidden md:table-cell py-3 px-3 text-center font-mono">${formatNumber(g.purchased)}</td><td data-label="إجمالي البيع" class="hidden md:table-cell py-3 px-3 text-center font-mono text-blue-600">${formatNumber(g.sold)}</td><td data-label="المتبقي" class="hidden md:table-cell py-3 px-3 text-center font-mono font-extrabold ${g.remaining > 0 ? 'text-emerald-600' : 'text-rose-600'}">${formatNumber(g.remaining)}</td><td data-label="إجراءات" class="py-3 px-3 text-center"><div class="flex items-center justify-center gap-1.5"><button type="button" onclick="addStockGroupToPurchase('${escapeAttr(g.key)}')" title="إضافة" class="w-8 h-8 inline-flex items-center justify-center rounded-lg bg-amber-100 text-amber-800 font-extrabold"><i data-lucide="plus" class="w-4 h-4"></i></button><button type="button" onclick="showStockDetails('${escapeAttr(g.key)}')" class="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg text-xs font-bold">تفاصيل</button></div></td>`;
                 tbody.appendChild(tr);
             });
             lucide.createIcons();
@@ -764,7 +710,7 @@
 
         function closeStockDetails(){const modal=document.getElementById('stock-details-modal');modal.classList.add('hidden');modal.classList.remove('flex');}
 
-        function setTodayDates() { const today = new Date().toISOString().split('T')[0]; ['sale-date', 'part-date', 'exp-date', 'pay-supplier-date'].forEach(id => { const el = document.getElementById(id); if (el) el.value = today; }); }
+        function setTodayDates() { const today = new Date().toISOString().split('T')[0]; ['sale-date', 'part-date', 'exp-date', 'pay-supplier-date', 'cap-date'].forEach(id => { const el = document.getElementById(id); if (el) el.value = today; }); }
 
         function applyCustomLogo() { const savedLogo = localStorage.getItem(CUSTOM_LOGO_KEY); if (savedLogo) { const headerImg = document.getElementById('header-logo-img'); const printImg = document.getElementById('print-logo-img'); if (headerImg) headerImg.src = savedLogo; if (printImg) printImg.src = savedLogo; } }
 
@@ -772,13 +718,38 @@
 
         function renderExpensesTable() {
             const tbody = document.getElementById('table-expenses-body'); if (!tbody) return; tbody.innerHTML = '';
-            if (appData.expenses.length === 0) { tbody.innerHTML = `<tr><td colspan="4" class="text-center py-6 text-slate-400">لا توجد مصاريف</td></tr>`; return; }
-            [...appData.expenses].sort((a, b) => parseDateForSort(b.date) - parseDateForSort(a.date)).forEach(ex => {
-                const tr = document.createElement('tr'); tr.className = 'hover:bg-slate-50 border-b border-slate-100';
-                tr.innerHTML = `<td data-label="التاريخ" class="py-2.5 px-3 text-xs font-mono text-slate-600 whitespace-nowrap" dir="ltr">${formatDisplayDate(ex.date)}</td><td data-label="البيان" class="py-2.5 px-3 font-bold text-xs text-slate-800">${ex.title}</td><td data-label="المبلغ" class="py-2.5 px-3 font-mono text-xs font-extrabold text-rose-600">${formatMoney(ex.amount)}</td><td data-label="إجراء" class="py-2.5 px-3 text-center"><button onclick="deleteExpense('${ex.id}')" class="p-1.5 bg-rose-50 text-rose-600 rounded-lg"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button></td>`;
-                tbody.appendChild(tr);
+            if (appData.expenses.length === 0) { tbody.innerHTML = `<tr><td colspan="4" class="text-center py-6 text-slate-400">لا توجد مصاريف</td></tr>`; }
+            else {
+                [...appData.expenses].sort((a, b) => parseDateForSort(b.date) - parseDateForSort(a.date)).forEach(ex => {
+                    const tr = document.createElement('tr'); tr.className = 'hover:bg-slate-50 border-b border-slate-100';
+                    tr.innerHTML = `<td data-label="التاريخ" class="py-2.5 px-3 text-xs font-mono text-slate-600 whitespace-nowrap" dir="ltr">${formatDisplayDate(ex.date)}</td><td data-label="البيان" class="py-2.5 px-3 font-bold text-xs text-slate-800">${escapeHtml(ex.title)}</td><td data-label="المبلغ" class="py-2.5 px-3 font-mono text-xs font-extrabold text-rose-600">${formatMoney(ex.amount)}</td><td data-label="إجراء" class="py-2.5 px-3 text-center"><button onclick="deleteExpense('${ex.id}')" class="p-1.5 bg-rose-50 text-rose-600 rounded-lg"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button></td>`;
+                    tbody.appendChild(tr);
+                });
+            }
+            renderCapitalList();
+            lucide.createIcons();
+        }
+
+        // عرض قائمة إيداعات رأس المال
+        function renderCapitalList() {
+            const list = document.getElementById('capital-list'); if (!list) return;
+            const items = [...(appData.capitalInjections || [])].sort((a, b) => parseDateForSort(b.date) - parseDateForSort(a.date));
+            if (!items.length) { list.innerHTML = '<p class="text-xs text-slate-400 text-center">لا توجد إيداعات رأس مال مسجلة.</p>'; return; }
+            list.innerHTML = '';
+            items.forEach(c => {
+                const div = document.createElement('div');
+                div.className = 'flex items-center justify-between gap-2 p-2 rounded-lg bg-emerald-50 border border-emerald-200';
+                div.innerHTML = `<div class="flex-1 min-w-0"><div class="text-xs font-bold text-emerald-900 truncate">${escapeHtml(c.title)}</div><div class="text-[10px] text-slate-500 font-mono" dir="ltr">${formatDisplayDate(c.date)}</div></div><div class="text-xs font-extrabold text-emerald-700 font-mono whitespace-nowrap">${formatMoney(c.amount)}</div><button onclick="deleteCapital('${c.id}')" class="p-1 text-rose-500 shrink-0"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>`;
+                list.appendChild(div);
             });
             lucide.createIcons();
+        }
+
+        function deleteCapital(id) {
+            showConfirmModal('حذف إيداع رأس مال', 'هل أنت متأكد؟', () => {
+                appData.capitalInjections = (appData.capitalInjections || []).filter(c => c.id !== id);
+                saveData(); showToast('تم الحذف', 'success');
+            });
         }
 
         function renderSuppliersTab() {
@@ -792,67 +763,40 @@
                 supMap[sName].totalPaid += paid;
                 supMap[sName].purchases.push(p);
             });
-
             appData.supplierPayments.forEach(pay => {
                 const sName = (pay.supplier || 'مورد نقدي عام').trim();
                 if (!supMap[sName]) supMap[sName] = { name: sName, totalGoods: 0, totalPaid: 0, purchases: [], payments: [] };
                 supMap[sName].totalPaid += Number(pay.amount || 0);
                 supMap[sName].payments.push(pay);
             });
-
             let grandGoods = 0, grandPaid = 0, grandDebt = 0;
             const summaryBody = document.getElementById('table-suppliers-summary');
             const selectEl = document.getElementById('pay-supplier-name');
             const currentSelect = selectEl ? selectEl.value : '';
-
             if (summaryBody) summaryBody.innerHTML = '';
             if (selectEl) selectEl.innerHTML = '<option value="">-- اختر المورد --</option>';
-
             Object.values(supMap).forEach(s => {
                 const rem = Math.max(0, s.totalGoods - s.totalPaid);
-                grandGoods += s.totalGoods;
-                grandPaid += s.totalPaid;
-                grandDebt += rem;
-
-                if (selectEl) {
-                    const opt = document.createElement('option');
-                    opt.value = s.name;
-                    opt.textContent = `${s.name} (متبقي: ${formatMoney(rem)})`;
-                    selectEl.appendChild(opt);
-                }
-
+                grandGoods += s.totalGoods; grandPaid += s.totalPaid; grandDebt += rem;
+                if (selectEl) { const opt = document.createElement('option'); opt.value = s.name; opt.textContent = `${s.name} (متبقي: ${formatMoney(rem)})`; selectEl.appendChild(opt); }
                 if (summaryBody) {
-                    const tr = document.createElement('tr');
-                    tr.className = 'hover:bg-slate-50 border-b border-slate-100 cursor-pointer transition';
+                    const tr = document.createElement('tr'); tr.className = 'hover:bg-slate-50 border-b border-slate-100 cursor-pointer transition';
                     tr.onclick = () => openSupplierDetails(s.name, supMap[s.name]);
-                    tr.innerHTML = `
-                        <td data-label="المورد" class="py-3 px-3 font-bold text-sm text-blue-700 hover:underline">${s.name}</td>
-                        <td data-label="البضاعة" class="py-3 px-3 font-mono text-xs text-slate-600">${formatMoney(s.totalGoods)}</td>
-                        <td data-label="المدفوع" class="py-3 px-3 font-mono text-xs text-emerald-600 font-bold">${formatMoney(s.totalPaid)}</td>
-                        <td data-label="المتبقي" class="py-3 px-3 font-mono text-xs text-rose-600 font-extrabold">${formatMoney(rem)}</td>
-                        <td data-label="الحالة" class="py-3 px-3 text-center">
-                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${rem > 0 ? 'bg-rose-100 text-rose-700' : 'bg-emerald-100 text-emerald-700'}">${rem > 0 ? 'مستحق' : 'خالص'}</span>
-                        </td>
-                    `;
+                    tr.innerHTML = `<td data-label="المورد" class="py-3 px-3 font-bold text-sm text-blue-700 hover:underline">${s.name}</td><td data-label="البضاعة" class="py-3 px-3 font-mono text-xs text-slate-600">${formatMoney(s.totalGoods)}</td><td data-label="المدفوع" class="py-3 px-3 font-mono text-xs text-emerald-600 font-bold">${formatMoney(s.totalPaid)}</td><td data-label="المتبقي" class="py-3 px-3 font-mono text-xs text-rose-600 font-extrabold">${formatMoney(rem)}</td><td data-label="الحالة" class="py-3 px-3 text-center"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${rem > 0 ? 'bg-rose-100 text-rose-700' : 'bg-emerald-100 text-emerald-700'}">${rem > 0 ? 'مستحق' : 'خالص'}</span></td>`;
                     summaryBody.appendChild(tr);
                 }
             });
-
             if (selectEl && currentSelect) selectEl.value = currentSelect;
-
             document.getElementById('sup-total-purchases').textContent = formatMoney(grandGoods);
             document.getElementById('sup-total-paid').textContent = formatMoney(grandPaid);
             document.getElementById('sup-total-debt').textContent = formatMoney(grandDebt);
-
             const payBody = document.getElementById('table-supplier-payments');
             if (payBody) {
                 payBody.innerHTML = '';
-                if (appData.supplierPayments.length === 0) {
-                    payBody.innerHTML = `<tr><td colspan="5" class="text-center py-6 text-slate-400">لا توجد دفعات</td></tr>`;
-                } else {
+                if (appData.supplierPayments.length === 0) { payBody.innerHTML = `<tr><td colspan="5" class="text-center py-6 text-slate-400">لا توجد دفعات</td></tr>`; }
+                else {
                     [...appData.supplierPayments].sort((a, b) => parseDateForSort(b.date) - parseDateForSort(a.date)).forEach(sp => {
-                        const tr = document.createElement('tr');
-                        tr.className = 'hover:bg-slate-50 border-b border-slate-100';
+                        const tr = document.createElement('tr'); tr.className = 'hover:bg-slate-50 border-b border-slate-100';
                         tr.innerHTML = `<td data-label="التاريخ" class="py-2.5 px-3 text-xs font-mono text-slate-600 whitespace-nowrap" dir="ltr">${formatDisplayDate(sp.date)}</td><td data-label="المورد" class="py-2.5 px-3 font-bold text-xs text-slate-800">${sp.supplier}</td><td data-label="المبلغ" class="py-2.5 px-3 font-mono text-xs font-extrabold text-emerald-600">${formatMoney(sp.amount)}</td><td data-label="ملاحظات" class="py-2.5 px-3 text-xs text-slate-500">${sp.notes || '-'}</td><td data-label="إجراء" class="py-2.5 px-3 text-center"><button onclick="deleteSupplierPayment('${sp.id}')" class="p-1.5 bg-rose-50 text-rose-600 rounded-lg"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button></td>`;
                         payBody.appendChild(tr);
                     });
@@ -866,43 +810,28 @@
             document.getElementById('supplier-detail-total').textContent = formatMoney(data.totalGoods);
             document.getElementById('supplier-detail-paid').textContent = formatMoney(data.totalPaid);
             document.getElementById('supplier-detail-rem').textContent = formatMoney(Math.max(0, data.totalGoods - data.totalPaid));
-
-            const purchasesBody = document.getElementById('supplier-purchases-body');
-            purchasesBody.innerHTML = '';
-            if (data.purchases.length === 0) {
-                purchasesBody.innerHTML = '<tr><td colspan="5" class="p-3 text-center text-slate-400">لا توجد مشتريات</td></tr>';
-            } else {
+            const purchasesBody = document.getElementById('supplier-purchases-body'); purchasesBody.innerHTML = '';
+            if (data.purchases.length === 0) { purchasesBody.innerHTML = '<tr><td colspan="5" class="p-3 text-center text-slate-400">لا توجد مشتريات</td></tr>'; }
+            else {
                 data.purchases.sort((a,b) => parseDateForSort(b.date) - parseDateForSort(a.date)).forEach(p => {
-                    const tr = document.createElement('tr');
-                    tr.className = 'hover:bg-slate-50';
+                    const tr = document.createElement('tr'); tr.className = 'hover:bg-slate-50';
                     tr.innerHTML = `<td class="p-2 font-mono text-slate-500 whitespace-nowrap" dir="ltr">${formatDisplayDate(p.date)}</td><td class="p-2 font-bold text-slate-700">${p.name || p.partName || 'صنف'}</td><td class="p-2 font-mono text-center">${formatNumber(p.initialQty)}</td><td class="p-2 font-mono text-center">${formatMoney(p.costPrice)}</td><td class="p-2 font-mono font-bold text-indigo-600">${formatMoney(p.initialQty * p.costPrice)}</td>`;
                     purchasesBody.appendChild(tr);
                 });
             }
-
-            const paymentsBody = document.getElementById('supplier-payments-body');
-            paymentsBody.innerHTML = '';
-            if (data.payments.length === 0) {
-                paymentsBody.innerHTML = '<tr><td colspan="3" class="p-3 text-center text-slate-400">لا توجد دفعات مسجلة</td></tr>';
-            } else {
+            const paymentsBody = document.getElementById('supplier-payments-body'); paymentsBody.innerHTML = '';
+            if (data.payments.length === 0) { paymentsBody.innerHTML = '<tr><td colspan="3" class="p-3 text-center text-slate-400">لا توجد دفعات مسجلة</td></tr>'; }
+            else {
                 data.payments.sort((a,b) => parseDateForSort(b.date) - parseDateForSort(a.date)).forEach(pay => {
-                    const tr = document.createElement('tr');
-                    tr.className = 'hover:bg-slate-50';
+                    const tr = document.createElement('tr'); tr.className = 'hover:bg-slate-50';
                     tr.innerHTML = `<td class="p-2 font-mono text-slate-500 whitespace-nowrap" dir="ltr">${formatDisplayDate(pay.date)}</td><td class="p-2 font-bold text-emerald-600 font-mono">${formatMoney(pay.amount)}</td><td class="p-2 text-slate-500">${pay.notes || '-'}</td>`;
                     paymentsBody.appendChild(tr);
                 });
             }
-
-            const modal = document.getElementById('supplier-detail-modal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
+            const modal = document.getElementById('supplier-detail-modal'); modal.classList.remove('hidden'); modal.classList.add('flex');
         }
 
-        function closeSupplierDetails() {
-            const modal = document.getElementById('supplier-detail-modal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }
+        function closeSupplierDetails() { const modal = document.getElementById('supplier-detail-modal'); modal.classList.add('hidden'); modal.classList.remove('flex'); }
 
         function deleteSale(id) { const selected = appData.sales.find(s => s.id === id); if (!selected) return; const invoiceId = selected.invoiceId; showConfirmModal('حذف الفاتورة', 'هل تريد حذف الفاتورة وإرجاع الكميات للمخزن؟', () => { const records = appData.sales.filter(s => s.invoiceId === invoiceId); records.forEach(sale => { if (Array.isArray(sale.stockAllocations) && sale.stockAllocations.length) { sale.stockAllocations.forEach(a => { const part = appData.parts.find(p => p.id === a.partId); if (part) part.soldQty = Math.max(0,(Number(part.soldQty)||0)-(Number(a.qty)||0)); }); } else if (sale.partId) { const part = appData.parts.find(p => p.id === sale.partId); if (part) part.soldQty = Math.max(0,(Number(part.soldQty)||0)-(Number(sale.qty)||0)); } }); appData.sales = appData.sales.filter(s => s.invoiceId !== invoiceId); saveData(); showToast('تم الحذف', 'success'); }); }
 
@@ -912,9 +841,9 @@
 
         function exportBackup() { const dataStr = JSON.stringify(appData, null, 2); const blob = new Blob([dataStr], { type: 'application/json' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `saljha-backup-${new Date().toISOString().split('T')[0]}.json`; a.click(); URL.revokeObjectURL(url); showToast('تم التنزيل', 'success'); }
 
-        function importBackup(event) { const file = event.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = function(e) { try { const parsed = JSON.parse(e.target.result); if (parsed && Array.isArray(parsed.parts) && Array.isArray(parsed.sales)) { appData.parts = parsed.parts || []; appData.sales = parsed.sales || []; appData.expenses = parsed.expenses || []; appData.supplierPayments = parsed.supplierPayments || []; appData.services = parsed.services || []; saveData(); closeCloudModal(); showToast('تم الاستعادة', 'success'); } else { showToast('ملف غير صالح', 'error'); } } catch (err) { showToast('خطأ في القراءة', 'error'); } }; reader.readAsText(file); }
+        function importBackup(event) { const file = event.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = function(e) { try { const parsed = JSON.parse(e.target.result); if (parsed && Array.isArray(parsed.parts) && Array.isArray(parsed.sales)) { appData.parts = parsed.parts || []; appData.sales = parsed.sales || []; appData.expenses = parsed.expenses || []; appData.supplierPayments = parsed.supplierPayments || []; appData.services = parsed.services || []; appData.capitalInjections = parsed.capitalInjections || []; saveData(); closeCloudModal(); showToast('تم الاستعادة', 'success'); } else { showToast('ملف غير صالح', 'error'); } } catch (err) { showToast('خطأ في القراءة', 'error'); } }; reader.readAsText(file); }
 
-        function openResetModal() { closeCloudModal(); showConfirmModal('مسح البيانات', 'تحذير: سيتم مسح كل شيء!', () => { appData = { parts: [], sales: [], expenses: [], supplierPayments: [], services: [] }; saveData(); showToast('تم المسح', 'success'); }); }
+        function openResetModal() { closeCloudModal(); showConfirmModal('مسح البيانات', 'تحذير: سيتم مسح كل شيء!', () => { appData = { parts: [], sales: [], expenses: [], supplierPayments: [], services: [], capitalInjections: [] }; saveData(); showToast('تم المسح', 'success'); }); }
 
         function renderServicesAndReports() {
             const list = document.getElementById('services-list'); if (list) { list.innerHTML = ''; (appData.services || []).forEach(service => { const item = document.createElement('div'); item.className = 'flex items-center justify-between gap-2 p-2 rounded-lg bg-slate-50 border'; const name = document.createElement('span'); name.className = 'text-sm font-semibold'; name.textContent = service.name; const del = document.createElement('button'); del.className = 'text-rose-600 text-xs font-bold'; del.textContent = 'حذف'; del.onclick = () => { appData.services = appData.services.filter(x => x.id !== service.id); saveData(); }; item.append(name, del); list.appendChild(item); }); if (!(appData.services || []).length) list.innerHTML = '<p class="text-xs text-slate-400">لا توجد خدمات.</p>'; }
@@ -953,6 +882,19 @@
 
         document.getElementById('form-expense').addEventListener('submit', function(e) { e.preventDefault(); const title = document.getElementById('exp-title').value.trim(); const amount = Number(document.getElementById('exp-amount').value) || 0; const date = document.getElementById('exp-date').value; if (!title || amount <= 0) return; appData.expenses.push({ id: generateId(), title, amount, date }); saveData(); this.reset(); setTodayDates(); showToast('تم تسجيل المصروف', 'success'); });
 
+        // فورم إيداع رأس المال الجديد
+        document.getElementById('form-capital').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const title = document.getElementById('cap-title').value.trim();
+            const amount = Number(document.getElementById('cap-amount').value) || 0;
+            const date = document.getElementById('cap-date').value;
+            if (!title || amount <= 0) { showToast('اكمل البيانات', 'error'); return; }
+            appData.capitalInjections = appData.capitalInjections || [];
+            appData.capitalInjections.push({ id: generateId(), title, amount, date });
+            saveData(); this.reset(); setTodayDates();
+            showToast('تم تسجيل إيداع رأس المال!', 'success');
+        });
+
         document.getElementById('form-supplier-payment').addEventListener('submit', function(e) { e.preventDefault(); const supplier = document.getElementById('pay-supplier-name').value; const amount = Number(document.getElementById('pay-supplier-amount').value) || 0; const date = document.getElementById('pay-supplier-date').value; const notes = document.getElementById('pay-supplier-notes').value.trim(); if (!supplier || amount <= 0) return; appData.supplierPayments.push({ id: generateId(), supplier, amount, date, notes }); saveData(); this.reset(); setTodayDates(); showToast('تم تسجيل الدفعة', 'success'); });
 
         document.getElementById('sale-maintenance').addEventListener('input', updateSalePreview); document.getElementById('part-paid').addEventListener('input', updatePurchasePreview);
@@ -963,7 +905,7 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             setTodayDates(); applyCustomLogo();
-            try { const saved = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('spare_parts_pro_data_v4'); if (saved) { const parsed = JSON.parse(saved); appData.parts = parsed.parts || []; appData.sales = parsed.sales || []; appData.expenses = parsed.expenses || []; appData.supplierPayments = parsed.supplierPayments || []; appData.services = parsed.services || []; } } catch(e) {}
+            try { const saved = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('spare_parts_pro_data_v4'); if (saved) { const parsed = JSON.parse(saved); appData.parts = parsed.parts || []; appData.sales = parsed.sales || []; appData.expenses = parsed.expenses || []; appData.supplierPayments = parsed.supplierPayments || []; appData.services = parsed.services || []; appData.capitalInjections = parsed.capitalInjections || []; } } catch(e) {}
             addSaleItemRow('stock'); addPurchaseItemRow(); renderAll(); updateCloudStatusUI(); lucide.createIcons();
             if (localStorage.getItem(CLOUD_URL_KEY) || DEFAULT_CLOUD_URL) { const overlay = document.getElementById('cloud-startup-overlay'); overlay.classList.remove('hidden'); overlay.classList.add('flex'); syncFromCloud(false); }
         });
