@@ -143,14 +143,17 @@
             <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
                 <div class="flex flex-wrap items-center justify-between gap-4 border-b pb-4 mb-5">
                     <div><h2 class="text-lg font-bold text-slate-800 flex items-center gap-2"><i data-lucide="user-check" class="w-5 h-5 text-indigo-600"></i>كشف حساب العملاء</h2><p class="text-xs text-slate-500 mt-1">اختر عميل لمعرفة تفاصيله</p></div>
-                    <div class="relative w-full sm:w-72"><i data-lucide="search" class="w-4 h-4 text-slate-400 absolute right-3 top-3"></i><input type="text" id="search-customers-tab" placeholder="بحث..." class="w-full rounded-xl border border-slate-300 pr-9 pl-3 py-2 text-sm"></div>
+                    <div class="flex gap-2 w-full sm:w-auto">
+                        <button onclick="openCustomerForm()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-3 py-2 rounded-xl flex items-center gap-1.5"><i data-lucide="user-plus" class="w-4 h-4"></i> عميل جديد</button>
+                        <div class="relative flex-1 sm:w-72"><i data-lucide="search" class="w-4 h-4 text-slate-400 absolute right-3 top-3"></i><input type="text" id="search-customers-tab" placeholder="بحث..." class="w-full rounded-xl border border-slate-300 pr-9 pl-3 py-2 text-sm"></div>
+                    </div>
                 </div>
                 <div id="customers-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
             </div>
             <div id="customer-detail-panel" class="hidden bg-white rounded-2xl p-6 shadow-md border-2 border-indigo-200 space-y-5">
                 <div class="flex flex-wrap items-center justify-between gap-3 border-b pb-4">
                     <div><span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-full">الملف التفصيلي</span><h3 class="text-xl font-extrabold text-slate-900 mt-1" id="detail-cust-name">-</h3><p class="text-xs text-slate-500 font-mono" id="detail-cust-phone" dir="ltr">-</p></div>
-                    <button onclick="closeCustomerDetail()" class="text-xs bg-slate-100 font-bold px-3 py-2 rounded-xl">إغلاق ✕</button>
+                    <div class="flex gap-2"><button onclick="openCustomerForm(selectedCustomerDetail)" class="text-xs bg-blue-50 text-blue-700 font-bold px-3 py-2 rounded-xl">تعديل</button><button onclick="closeCustomerDetail()" class="text-xs bg-slate-100 font-bold px-3 py-2 rounded-xl">إغلاق ✕</button></div>
                 </div>
                 <div class="grid grid-cols-3 gap-2">
                     <div class="bg-slate-50 p-2 rounded-lg border border-slate-200 text-center"><span class="text-[10px] font-bold text-slate-500">إجمالي المدفوع</span><div class="text-sm font-extrabold text-slate-900 font-mono mt-0.5" id="detail-cust-total">0</div></div>
@@ -271,6 +274,20 @@
             </div>
         </div>
     </main>
+
+    <div id="customer-form-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden items-center justify-center p-3">
+        <div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-2xl space-y-4">
+            <div class="flex items-center justify-between border-b pb-3"><h3 class="text-base font-extrabold text-slate-800" id="cust-form-title">إضافة عميل جديد</h3><button onclick="closeCustomerForm()" class="text-slate-400 font-bold">✕</button></div>
+            <form id="form-customer" class="space-y-3">
+                <input type="hidden" id="cust-id">
+                <div><label class="block text-xs font-bold text-slate-700 mb-1">الاسم *</label><input type="text" id="cust-name" required class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></div>
+                <div><label class="block text-xs font-bold text-slate-700 mb-1">الهاتف *</label><input type="tel" id="cust-phone" required dir="ltr" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm font-mono text-left"></div>
+                <div><label class="block text-xs font-bold text-slate-700 mb-1">العنوان *</label><input type="text" id="cust-address" required class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></div>
+                <div><label class="block text-xs font-bold text-slate-700 mb-1">ملاحظات</label><textarea id="cust-notes" rows="2" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></textarea></div>
+                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-sm">حفظ</button>
+            </form>
+        </div>
+    </div>
 
     <div id="print-invoice-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden p-2 sm:p-4 overflow-y-auto">
         <div class="bg-white rounded-2xl w-full max-w-md mx-auto my-4 sm:my-8 p-4 sm:p-6 shadow-2xl space-y-4 print:shadow-none print:p-0 print:my-0 print:max-w-none">
@@ -406,7 +423,7 @@
         const DEFAULT_CLOUD_URL = '';
         const CUSTOM_LOGO_KEY = 'saljha_custom_logo_v1';
 
-        let appData = { parts: [], sales: [], expenses: [], supplierPayments: [], services: [], capitalInjections: [] };
+        let appData = { parts: [], sales: [], expenses: [], supplierPayments: [], services: [], capitalInjections: [], customers: [] };
         let cloudSaveQueue = Promise.resolve();
         let confirmCallback = null;
         let selectedCustomerDetail = null;
@@ -531,8 +548,8 @@
                     if ((!cloudArr || cloudArr.length === 0) && localArr.length > 0) return localArr;
                     return cloudArr || localArr;
                 };
-                const cloudHasData = ['parts','sales','expenses','supplierPayments','services','capitalInjections'].some(k => Array.isArray(cloud[k]) && cloud[k].length);
-                const localHasData = ['parts','sales','expenses','supplierPayments','services','capitalInjections'].some(k => Array.isArray(localSnapshot[k]) && localSnapshot[k].length);
+                const cloudHasData = ['parts','sales','expenses','supplierPayments','services','capitalInjections','customers'].some(k => Array.isArray(cloud[k]) && cloud[k].length);
+                const localHasData = ['parts','sales','expenses','supplierPayments','services','capitalInjections','customers'].some(k => Array.isArray(localSnapshot[k]) && localSnapshot[k].length);
                 if (!cloudHasData && localHasData) { await pushToCloud(); }
                 else {
                     const localSalesById = new Map((localSnapshot.sales || []).map(x => [String(x.id), x]));
@@ -541,6 +558,7 @@
                     appData.supplierPayments = safeArray('supplierPayments');
                     appData.services = safeArray('services');
                     appData.capitalInjections = safeArray('capitalInjections');
+                    appData.customers = safeArray('customers');
                     const cloudSales = Array.isArray(cloud.sales) ? cloud.sales : [];
                     if (cloudSales.length === 0 && (localSnapshot.sales || []).length > 0) { appData.sales = localSnapshot.sales; }
                     else {
@@ -553,7 +571,7 @@
                         });
                     }
                     localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
-                    if (localSalesById.size || (localSnapshot.expenses||[]).length || (localSnapshot.capitalInjections||[]).length) { await pushToCloud(); }
+                    if (localSalesById.size || (localSnapshot.expenses||[]).length || (localSnapshot.capitalInjections||[]).length || (localSnapshot.customers||[]).length) { await pushToCloud(); }
                 }
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(appData)); renderAll(); if (showNotification) showToast('تمت المزامنة وتحديث البيانات بنجاح!', 'success');
             } catch (error) {
@@ -597,8 +615,12 @@
         function refreshSaleDropdowns() {
             const optionsHTML = getPartsOptionsHTML();
             document.querySelectorAll('.sale-row-part').forEach(select => { const current = select.value; select.innerHTML = optionsHTML; if (current) select.value = current; });
-            const datalist = document.getElementById('customers-datalist'); const unique = [...new Set(appData.sales.map(s => s.customer).filter(Boolean))];
-            datalist.innerHTML = unique.map(c => `<option value="${c}">`).join('');
+            const datalist = document.getElementById('customers-datalist');
+            const unique = [...new Set([
+                ...(appData.customers || []).map(c => c.name).filter(Boolean),
+                ...appData.sales.map(s => s.customer).filter(Boolean)
+            ])];
+            datalist.innerHTML = unique.map(c => `<option value="${escapeAttr(c)}">`).join('');
         }
 
         function renderSalesTable() {
@@ -649,15 +671,47 @@
 
         function downloadImage(blob, fileName) { const url = URL.createObjectURL(blob); const link = document.createElement('a'); link.href = url; link.download = fileName; document.body.appendChild(link); link.click(); document.body.removeChild(link); URL.revokeObjectURL(url); showToast('تم تنزيل صورة الفاتورة', 'success'); }
 
+        function openCustomerForm(customerName) {
+            const modal = document.getElementById('customer-form-modal'); modal.classList.remove('hidden'); modal.classList.add('flex');
+            const idEl = document.getElementById('cust-id');
+            if (customerName) {
+                const c = (appData.customers || []).find(x => x.name === customerName);
+                if (c) {
+                    document.getElementById('cust-form-title').textContent = 'تعديل بيانات عميل';
+                    idEl.value = c.id; document.getElementById('cust-name').value = c.name || '';
+                    document.getElementById('cust-phone').value = c.phone || '';
+                    document.getElementById('cust-address').value = c.address || '';
+                    document.getElementById('cust-notes').value = c.notes || '';
+                    return;
+                }
+            }
+            document.getElementById('cust-form-title').textContent = 'إضافة عميل جديد';
+            idEl.value = ''; document.getElementById('form-customer').reset();
+        }
+
+        function closeCustomerForm() { const modal = document.getElementById('customer-form-modal'); modal.classList.add('hidden'); modal.classList.remove('flex'); }
+
         function renderCustomersDirectory() {
             const grid = document.getElementById('customers-cards-grid'); const search = document.getElementById('search-customers-tab').value.toLowerCase(); grid.innerHTML = '';
-            const cMap = {}; appData.sales.forEach(s => { const name = (s.customer || 'عميل نقدي').trim(); if (!cMap[name]) cMap[name] = { name, phone: s.phone || '', totalParts: 0, totalMaint: 0, records: [] }; if (s.phone && !cMap[name].phone) cMap[name].phone = s.phone; const pRev = (s.invoiceTotal !== undefined && s.invoiceTotal !== null && s.invoiceTotal !== '') ? (Number(s.invoiceTotal)||0) : (Number(s.qty)||0)*(Number(s.salePrice)||0); cMap[name].totalParts += pRev; cMap[name].totalMaint += Number(s.maintenanceFee) || 0; cMap[name].records.push(s); });
+            const cMap = {};
+            (appData.customers || []).forEach(c => {
+                if (!cMap[c.name]) cMap[c.name] = { name: c.name, phone: c.phone || '', address: c.address || '', notes: c.notes || '', records: [], isMaster: true };
+            });
+            appData.sales.forEach(s => { const name = (s.customer || 'عميل نقدي').trim(); if (!cMap[name]) cMap[name] = { name, phone: s.phone || '', address: s.location || '', notes: '', records: [], isMaster: false }; if (s.phone && !cMap[name].phone) cMap[name].phone = s.phone; cMap[name].records.push(s); });
             const list = Object.values(cMap).filter(c => c.name.toLowerCase().includes(search) || (c.phone && c.phone.includes(search)));
             if (list.length === 0) { grid.innerHTML = `<div class="col-span-full text-center py-8 text-slate-400">لا توجد عملاء</div>`; return; }
             list.forEach(c => {
-                const total = c.totalParts + c.totalMaint; const card = document.createElement('div');
+                const invoiceSet = new Set(c.records.map(r => r.invoiceId || r.id));
+                const visitCount = invoiceSet.size;
+                let totalPaid = 0, totalParts = 0;
+                c.records.forEach(r => {
+                    const pRev = (r.invoiceTotal !== undefined && r.invoiceTotal !== null && r.invoiceTotal !== '') ? (Number(r.invoiceTotal)||0) : (Number(r.qty)||0)*(Number(r.salePrice)||0);
+                    totalPaid += pRev;
+                    totalParts += (Number(r.qty)||0)*(Number(r.costPrice)||0);
+                });
+                const card = document.createElement('div');
                 card.className = 'bg-slate-50 hover:bg-indigo-50/40 border border-slate-200 rounded-2xl p-4 transition cursor-pointer flex flex-col justify-between space-y-3'; card.onclick = () => openCustomerDetail(c.name);
-                card.innerHTML = `<div class="flex items-start justify-between"><div><h3 class="font-extrabold text-slate-800 text-base">${c.name}</h3><p class="text-xs text-slate-500 font-mono mt-0.5" dir="ltr">${c.phone || 'بدون رقم'}</p></div><span class="text-xs bg-white border px-2.5 py-1 rounded-full font-bold text-slate-600">${formatNumber(c.records.length)} زيارة</span></div><div class="grid grid-cols-3 gap-2 pt-2 border-t text-xs"><div><span class="text-[10px] text-slate-500 block">إجمالي</span><span class="font-extrabold font-mono">${formatMoney(total)}</span></div><div><span class="text-[10px] text-indigo-600 block">صيانة</span><span class="font-bold text-indigo-700 font-mono">${formatMoney(c.totalMaint)}</span></div><div><span class="text-[10px] text-blue-600 block">قطع</span><span class="font-bold text-blue-700 font-mono">${formatMoney(c.totalParts)}</span></div></div>`;
+                card.innerHTML = `<div class="flex items-start justify-between"><div><h3 class="font-extrabold text-slate-800 text-base">${escapeHtml(c.name)}</h3><p class="text-xs text-slate-500 font-mono mt-0.5" dir="ltr">${escapeHtml(c.phone) || 'بدون رقم'}</p></div><span class="text-xs bg-white border px-2.5 py-1 rounded-full font-bold text-slate-600">${formatNumber(visitCount)} زيارة</span></div><div class="grid grid-cols-3 gap-2 pt-2 border-t text-xs"><div><span class="text-[10px] text-slate-500 block">إجمالي</span><span class="font-extrabold font-mono">${formatMoney(totalPaid)}</span></div><div><span class="text-[10px] text-indigo-600 block">صيانة</span><span class="font-bold text-indigo-700 font-mono">${formatMoney(0)}</span></div><div><span class="text-[10px] text-blue-600 block">قطع</span><span class="font-bold text-blue-700 font-mono">${formatMoney(totalParts)}</span></div></div>`;
                 grid.appendChild(card);
             });
             if (selectedCustomerDetail && cMap[selectedCustomerDetail]) openCustomerDetail(selectedCustomerDetail);
@@ -666,7 +720,8 @@
         function openCustomerDetail(cName) {
             selectedCustomerDetail = cName;
             const records = appData.sales.filter(s => (s.customer || 'عميل نقدي').trim() === cName);
-            if (records.length === 0) return;
+            const master = (appData.customers || []).find(c => c.name === cName);
+            if (records.length === 0 && !master) return;
 
             const invoiceMap = new Map();
             records.forEach(r => {
@@ -675,7 +730,7 @@
                 invoiceMap.get(invId).push(r);
             });
 
-            let totalPaid = 0, totalPartsCost = 0, phone = '';
+            let totalPaid = 0, totalPartsCost = 0, phone = master?.phone || '';
             const cardsContainer = document.getElementById('detail-cust-history-body');
             cardsContainer.innerHTML = '';
 
@@ -687,7 +742,7 @@
 
             sortedInvoices.forEach(([invId, invRecords]) => {
                 const first = invRecords[0];
-                if (first.phone) phone = first.phone;
+                if (first.phone && !phone) phone = first.phone;
 
                 const invoiceTotal = invoiceTotalForRecords(invRecords);
                 const partsCost = invRecords.reduce((sum, r) => sum + (Number(r.qty) || 0) * (Number(r.costPrice) || 0), 0);
@@ -733,6 +788,10 @@
                 `;
                 cardsContainer.appendChild(card);
             });
+
+            if (sortedInvoices.length === 0) {
+                cardsContainer.innerHTML = '<div class="text-center text-slate-400 text-sm py-6">لا توجد فواتير مسجلة لهذا العميل بعد.</div>';
+            }
 
             const netProfit = totalPaid - totalPartsCost;
 
@@ -904,9 +963,9 @@
 
         function exportBackup() { const dataStr = JSON.stringify(appData, null, 2); const blob = new Blob([dataStr], { type: 'application/json' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `saljha-backup-${new Date().toISOString().split('T')[0]}.json`; a.click(); URL.revokeObjectURL(url); showToast('تم التنزيل', 'success'); }
 
-        function importBackup(event) { const file = event.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = function(e) { try { const parsed = JSON.parse(e.target.result); if (parsed && Array.isArray(parsed.parts) && Array.isArray(parsed.sales)) { appData.parts = parsed.parts || []; appData.sales = parsed.sales || []; appData.expenses = parsed.expenses || []; appData.supplierPayments = parsed.supplierPayments || []; appData.services = parsed.services || []; appData.capitalInjections = parsed.capitalInjections || []; saveData(); closeCloudModal(); showToast('تم الاستعادة', 'success'); } else { showToast('ملف غير صالح', 'error'); } } catch (err) { showToast('خطأ في القراءة', 'error'); } }; reader.readAsText(file); }
+        function importBackup(event) { const file = event.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = function(e) { try { const parsed = JSON.parse(e.target.result); if (parsed && Array.isArray(parsed.parts) && Array.isArray(parsed.sales)) { appData.parts = parsed.parts || []; appData.sales = parsed.sales || []; appData.expenses = parsed.expenses || []; appData.supplierPayments = parsed.supplierPayments || []; appData.services = parsed.services || []; appData.capitalInjections = parsed.capitalInjections || []; appData.customers = parsed.customers || []; saveData(); closeCloudModal(); showToast('تم الاستعادة', 'success'); } else { showToast('ملف غير صالح', 'error'); } } catch (err) { showToast('خطأ في القراءة', 'error'); } }; reader.readAsText(file); }
 
-        function openResetModal() { closeCloudModal(); showConfirmModal('مسح البيانات', 'تحذير: سيتم مسح كل شيء!', () => { appData = { parts: [], sales: [], expenses: [], supplierPayments: [], services: [], capitalInjections: [] }; saveData(); showToast('تم المسح', 'success'); }); }
+        function openResetModal() { closeCloudModal(); showConfirmModal('مسح البيانات', 'تحذير: سيتم مسح كل شيء!', () => { appData = { parts: [], sales: [], expenses: [], supplierPayments: [], services: [], capitalInjections: [], customers: [] }; saveData(); showToast('تم المسح', 'success'); }); }
 
         function renderServicesAndReports() {
             const list = document.getElementById('services-list'); if (list) { list.innerHTML = ''; (appData.services || []).forEach(service => { const item = document.createElement('div'); item.className = 'flex items-center justify-between gap-2 p-2 rounded-lg bg-slate-50 border'; const name = document.createElement('span'); name.className = 'text-sm font-semibold'; name.textContent = service.name; const del = document.createElement('button'); del.className = 'text-rose-600 text-xs font-bold'; del.textContent = 'حذف'; del.onclick = () => { appData.services = appData.services.filter(x => x.id !== service.id); saveData(); }; item.append(name, del); list.appendChild(item); }); if (!(appData.services || []).length) list.innerHTML = '<p class="text-xs text-slate-400">لا توجد خدمات.</p>'; }
@@ -922,11 +981,39 @@
 
         function renderAll() { renderDashboard(); refreshSaleDropdowns(); renderSalesTable(); renderCustomersDirectory(); renderInventoryTable(); renderExpensesTable(); renderSuppliersTab(); renderServicesAndReports(); }
 
+        document.getElementById('form-customer').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const id = document.getElementById('cust-id').value;
+            const name = document.getElementById('cust-name').value.trim();
+            const phone = document.getElementById('cust-phone').value.trim();
+            const address = document.getElementById('cust-address').value.trim();
+            const notes = document.getElementById('cust-notes').value.trim();
+            if (!name || !phone || !address) { showToast('اكمل الحقول الإجبارية', 'error'); return; }
+            appData.customers = appData.customers || [];
+            if (id) {
+                const idx = appData.customers.findIndex(c => c.id === id);
+                if (idx >= 0) { appData.customers[idx] = { ...appData.customers[idx], name, phone, address, notes }; }
+            } else {
+                if (appData.customers.some(c => c.name === name)) { showToast('اسم العميل موجود بالفعل', 'error'); return; }
+                appData.customers.push({ id: generateId(), name, phone, address, notes, createdAt: new Date().toISOString().split('T')[0] });
+            }
+            saveData(); closeCustomerForm(); showToast('تم حفظ بيانات العميل', 'success');
+        });
+
         document.getElementById('form-sale').addEventListener('submit', function(e) {
             e.preventDefault();
             const customer = document.getElementById('sale-customer').value.trim(); const phone = document.getElementById('sale-phone').value.trim(); const date = document.getElementById('sale-date').value;
             const invoiceTotal = Number(document.getElementById('sale-maintenance').value) || 0; const serviceType = document.getElementById('sale-service-type').value.trim(); const serviceProvided = document.getElementById('sale-service-provided').value.trim();
             const notes = document.getElementById('sale-notes').value.trim(); const location = document.getElementById('sale-location').value.trim(); const items = []; let stockError = false;
+
+            if (customer && !(appData.customers || []).some(c => c.name === customer) && !appData.sales.some(s => s.customer === customer)) {
+                showToast('العميل غير مسجل. أضفه أولاً من تبويب العملاء', 'error');
+                if (confirm('هل تريد إضافته الآن؟')) {
+                    openCustomerForm(); document.getElementById('cust-name').value = customer; document.getElementById('cust-phone').value = phone;
+                }
+                return;
+            }
+
             document.querySelectorAll('.sale-item-row').forEach(row => { const type = row.dataset.type; const qty = Number(row.querySelector('.sale-row-qty')?.value) || 0; if (type === 'stock') { const key = row.querySelector('.sale-row-part')?.value; const group = getStockGroups().find(g => g.key === key); if (group && qty > 0) { if (qty > group.remaining) { showToast(`الكمية أكبر من المتاح`, 'error'); stockError = true; } else items.push({ group, qty }); } } else if (type === 'custom') { const name = row.querySelector('.sale-row-custom-name')?.value.trim(); const cost = Number(row.querySelector('.sale-row-cost-custom')?.value) || 0; if (name && qty > 0) items.push({ customName: name, qty, cost }); } });
             if (stockError) return; if (!invoiceTotal || invoiceTotal <= 0) { showToast('اكتب إجمالي الفاتورة', 'error'); return; } if (!items.length && !serviceType && !serviceProvided) { showToast('أضف قطعة أو خدمة', 'error'); return; }
             const invoiceId = 'INV-' + Math.floor(100000 + Math.random() * 900000);
@@ -967,7 +1054,7 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             setTodayDates(); applyCustomLogo();
-            try { const saved = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('spare_parts_pro_data_v4'); if (saved) { const parsed = JSON.parse(saved); appData.parts = parsed.parts || []; appData.sales = parsed.sales || []; appData.expenses = parsed.expenses || []; appData.supplierPayments = parsed.supplierPayments || []; appData.services = parsed.services || []; appData.capitalInjections = parsed.capitalInjections || []; } } catch(e) {}
+            try { const saved = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('spare_parts_pro_data_v4'); if (saved) { const parsed = JSON.parse(saved); appData.parts = parsed.parts || []; appData.sales = parsed.sales || []; appData.expenses = parsed.expenses || []; appData.supplierPayments = parsed.supplierPayments || []; appData.services = parsed.services || []; appData.capitalInjections = parsed.capitalInjections || []; appData.customers = parsed.customers || []; } } catch(e) {}
             addSaleItemRow('stock'); addPurchaseItemRow(); renderAll(); updateCloudStatusUI(); lucide.createIcons();
             if (localStorage.getItem(CLOUD_URL_KEY) || DEFAULT_CLOUD_URL) { const overlay = document.getElementById('cloud-startup-overlay'); overlay.classList.remove('hidden'); overlay.classList.add('flex'); syncFromCloud(false); }
         });
