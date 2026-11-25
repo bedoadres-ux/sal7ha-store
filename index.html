@@ -63,13 +63,12 @@
 
     <main class="max-w-7xl w-full mx-auto px-4 py-6 flex-grow space-y-6">
 
-        <!-- بطاقات الملخص المالي -->
         <section class="grid grid-cols-3 gap-2 sm:gap-3">
             <div class="bg-white rounded-xl p-2 sm:p-3 shadow-sm border border-slate-200 flex flex-col justify-center items-center text-center">
                 <span class="text-[9px] sm:text-[11px] font-bold text-slate-500 mb-1 leading-tight">النقدية بالخزنة</span>
                 <div class="text-xs sm:text-lg font-extrabold text-blue-600 font-mono" id="dash-cash-drawer">0 ج.م</div>
                 <span class="text-[8px] sm:text-[10px] text-emerald-600 font-bold mt-0.5">صافي الربح: <span id="dash-net-profit-sub">0 ج.م</span></span>
-                <span class="text-[8px] sm:text-[10px] text-violet-600 font-bold mt-0.5">رأس المال: <span id="dash-capital-in">0 ج.م</span></span>
+                <span class="hidden text-[8px] sm:text-[10px] text-violet-600 font-bold mt-0.5">رأس المال: <span id="dash-capital-in">0 ج.م</span></span>
             </div>
             <div class="bg-white rounded-xl p-2 sm:p-3 shadow-sm border border-slate-200 flex flex-col justify-center items-center text-center">
                 <span class="text-[9px] sm:text-[11px] font-bold text-slate-500 mb-1 leading-tight">حق البضاعة</span>
@@ -84,16 +83,14 @@
             </div>
         </section>
 
-        <!-- شريط التبويبات -->
-<nav class="bg-white p-1.5 rounded-2xl shadow-sm border border-slate-200 flex flex-wrap gap-1.5 overflow-x-auto">
-    <button onclick="switchTab('sales')" id="tab-btn-sales" class="tab-btn flex-1 min-w-[130px] py-3 px-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition bg-blue-600 text-white shadow-sm"><i data-lucide="shopping-cart" class="w-4 h-4"></i><span>فاتورة بيع وصيانة</span></button>
-    <button onclick="switchTab('customers')" id="tab-btn-customers" class="tab-btn flex-1 min-w-[130px] py-3 px-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition text-slate-600 hover:bg-slate-100"><i data-lucide="user-check" class="w-4 h-4"></i><span>ملفات العملاء</span></button>
-    <button onclick="switchTab('inventory')" id="tab-btn-inventory" class="tab-btn flex-1 min-w-[130px] py-3 px-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition text-slate-600 hover:bg-slate-100"><i data-lucide="boxes" class="w-4 h-4"></i><span>المشتريات والمخزن</span></button>
-    <button onclick="switchTab('suppliers')" id="tab-btn-suppliers" class="tab-btn flex-1 min-w-[130px] py-3 px-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition text-slate-600 hover:bg-slate-100"><i data-lucide="users" class="w-4 h-4"></i><span>حسابات الموردين</span></button>
-    <button onclick="switchTab('expenses')" id="tab-btn-expenses" class="tab-btn flex-1 min-w-[130px] py-3 px-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition text-slate-600 hover:bg-slate-100"><i data-lucide="wallet" class="w-4 h-4"></i><span>المصاريف ورأس المال</span></button>
-</nav>
+        <nav class="bg-white p-1.5 rounded-2xl shadow-sm border border-slate-200 flex flex-wrap gap-1.5 overflow-x-auto">
+            <button onclick="switchTab('sales')" id="tab-btn-sales" class="tab-btn flex-1 min-w-[130px] py-3 px-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition bg-blue-600 text-white shadow-sm"><i data-lucide="shopping-cart" class="w-4 h-4"></i><span>فاتورة بيع وصيانة</span></button>
+            <button onclick="switchTab('customers')" id="tab-btn-customers" class="tab-btn flex-1 min-w-[130px] py-3 px-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition text-slate-600 hover:bg-slate-100"><i data-lucide="user-check" class="w-4 h-4"></i><span>ملفات العملاء</span></button>
+            <button onclick="switchTab('inventory')" id="tab-btn-inventory" class="tab-btn flex-1 min-w-[130px] py-3 px-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition text-slate-600 hover:bg-slate-100"><i data-lucide="boxes" class="w-4 h-4"></i><span>المشتريات والمخزن</span></button>
+            <button onclick="switchTab('suppliers')" id="tab-btn-suppliers" class="tab-btn flex-1 min-w-[130px] py-3 px-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition text-slate-600 hover:bg-slate-100"><i data-lucide="users" class="w-4 h-4"></i><span>حسابات الموردين</span></button>
+            <button onclick="switchTab('expenses')" id="tab-btn-expenses" class="tab-btn flex-1 min-w-[130px] py-3 px-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition text-slate-600 hover:bg-slate-100"><i data-lucide="wallet" class="w-4 h-4"></i><span>المصاريف ورأس المال</span></button>
+        </nav>
 
-        <!-- تبويب 1: فاتورة بيع وصيانة -->
         <div id="tab-sales" class="tab-content grid grid-cols-1 lg:grid-cols-12 gap-6">
             <div class="lg:col-span-5 bg-white rounded-2xl p-6 shadow-sm border border-slate-200 h-fit">
                 <h2 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2 border-b pb-3"><i data-lucide="file-plus-2" class="w-5 h-5 text-blue-600"></i>تسجيل فاتورة عميل</h2>
@@ -142,7 +139,6 @@
             </div>
         </div>
 
-        <!-- تبويب 2: العملاء -->
         <div id="tab-customers" class="tab-content hidden space-y-6">
             <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
                 <div class="flex flex-wrap items-center justify-between gap-4 border-b pb-4 mb-5">
@@ -156,22 +152,18 @@
                     <div><span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-full">الملف التفصيلي</span><h3 class="text-xl font-extrabold text-slate-900 mt-1" id="detail-cust-name">-</h3><p class="text-xs text-slate-500 font-mono" id="detail-cust-phone" dir="ltr">-</p></div>
                     <button onclick="closeCustomerDetail()" class="text-xs bg-slate-100 font-bold px-3 py-2 rounded-xl">إغلاق ✕</button>
                 </div>
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                    <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-center"><span class="text-[11px] font-bold text-slate-500">إجمالي المدفوع</span><div class="text-lg font-extrabold text-slate-900 font-mono mt-0.5" id="detail-cust-total">0</div></div>
-                    <div class="bg-indigo-50/70 p-3.5 rounded-xl border border-indigo-100 text-center"><span class="text-[11px] font-bold text-indigo-700">أجور صيانة</span><div class="text-lg font-extrabold text-indigo-700 font-mono mt-0.5" id="detail-cust-maint">0</div></div>
-                    <div class="bg-blue-50/70 p-3.5 rounded-xl border border-blue-100 text-center"><span class="text-[11px] font-bold text-blue-700">قطع غيار</span><div class="text-lg font-extrabold text-blue-700 font-mono mt-0.5" id="detail-cust-parts">0</div></div>
-                    <div class="bg-emerald-50/70 p-3.5 rounded-xl border border-emerald-100 text-center"><span class="text-[11px] font-bold text-emerald-700">صافي الربح</span><div class="text-lg font-extrabold text-emerald-700 font-mono mt-0.5" id="detail-cust-profit">0</div></div>
+                <div class="grid grid-cols-3 gap-2">
+                    <div class="bg-slate-50 p-2 rounded-lg border border-slate-200 text-center"><span class="text-[10px] font-bold text-slate-500">إجمالي المدفوع</span><div class="text-sm font-extrabold text-slate-900 font-mono mt-0.5" id="detail-cust-total">0</div></div>
+                    <div class="bg-blue-50/70 p-2 rounded-lg border border-blue-100 text-center"><span class="text-[10px] font-bold text-blue-700">قطع غيار</span><div class="text-sm font-extrabold text-blue-700 font-mono mt-0.5" id="detail-cust-parts">0</div></div>
+                    <div class="bg-emerald-50/70 p-2 rounded-lg border border-emerald-100 text-center"><span class="text-[10px] font-bold text-emerald-700">صافي الربح</span><div class="text-sm font-extrabold text-emerald-700 font-mono mt-0.5" id="detail-cust-profit">0</div></div>
                 </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-right border-collapse responsive-table">
-                        <thead><tr class="bg-slate-100 text-slate-700 text-xs border-b border-slate-200"><th class="py-2.5 px-3 font-bold">التاريخ</th><th class="py-2.5 px-3 font-bold">البيان</th><th class="py-2.5 px-3 font-bold text-center">الكمية</th><th class="py-2.5 px-3 font-bold">المستحق</th><th class="py-2.5 px-3 font-bold">تكلفة</th><th class="py-2.5 px-3 font-bold">الإجمالي</th><th class="py-2.5 px-3 font-bold">ملاحظات</th></tr></thead>
-                        <tbody id="detail-cust-history-body" class="divide-y divide-slate-100 text-sm"></tbody>
-                    </table>
+                <div class="space-y-2">
+                    <h4 class="text-sm font-bold text-slate-700 flex items-center gap-1.5"><i data-lucide="file-text" class="w-4 h-4 text-indigo-600"></i> الفواتير</h4>
+                    <div id="detail-cust-history-body" class="space-y-2 max-h-[60vh] overflow-y-auto pr-1"></div>
                 </div>
             </div>
         </div>
 
-        <!-- تبويب 3: المشتريات والمخزن -->
         <div id="tab-inventory" class="tab-content hidden grid grid-cols-1 lg:grid-cols-12 gap-6">
             <div class="lg:col-span-5 bg-white rounded-2xl p-6 shadow-sm border border-slate-200 h-fit">
                 <h2 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2 border-b pb-3"><i data-lucide="package-plus" class="w-5 h-5 text-amber-600"></i>تسجيل مشتريات</h2>
@@ -206,7 +198,6 @@
             </div>
         </div>
 
-        <!-- تبويب 4: المصاريف + إيداع رأس مال -->
         <div id="tab-expenses" class="tab-content hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div class="space-y-6">
                 <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 h-fit">
@@ -218,8 +209,6 @@
                         <button type="submit" class="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-3 px-4 rounded-xl shadow-sm transition flex items-center justify-center gap-2"><i data-lucide="save" class="w-5 h-5"></i><span>حفظ</span></button>
                     </form>
                 </div>
-
-                <!-- فورم إيداع رأس المال (جديد) -->
                 <div class="bg-white rounded-2xl p-6 shadow-sm border-2 border-emerald-200 h-fit">
                     <h2 class="text-lg font-bold text-emerald-800 mb-4 flex items-center gap-2 border-b pb-3"><i data-lucide="banknote" class="w-5 h-5 text-emerald-600"></i>إيداع رأس مال / تمويل</h2>
                     <p class="text-[11px] text-slate-500 mb-3 -mt-2">التمويل الأولي بيتزود بيه الخزنة، ومش بيتحسب كمصروف ولا بيقلل الربح.</p>
@@ -232,7 +221,6 @@
                     <div id="capital-list" class="mt-4 space-y-2 max-h-56 overflow-y-auto"></div>
                 </div>
             </div>
-
             <div class="lg:col-span-2 bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex flex-col">
                 <div class="flex items-center justify-between mb-4 border-b pb-3"><h2 class="text-lg font-bold text-slate-800 flex items-center gap-2"><i data-lucide="file-text" class="w-5 h-5 text-rose-600"></i>المصاريف</h2></div>
                 <div class="overflow-x-auto flex-grow">
@@ -244,7 +232,6 @@
             </div>
         </div>
 
-        <!-- تبويب 5: الموردين -->
         <div id="tab-suppliers" class="tab-content hidden space-y-6">
             <div class="grid grid-cols-3 gap-2 sm:gap-3">
                 <div class="bg-white rounded-xl p-2 sm:p-3 shadow-sm border border-slate-200 flex flex-col justify-center items-center text-center">
@@ -285,7 +272,6 @@
         </div>
     </main>
 
-    <!-- نافذة طباعة الفاتورة -->
     <div id="print-invoice-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden p-2 sm:p-4 overflow-y-auto">
         <div class="bg-white rounded-2xl w-full max-w-md mx-auto my-4 sm:my-8 p-4 sm:p-6 shadow-2xl space-y-4 print:shadow-none print:p-0 print:my-0 print:max-w-none">
             <div id="invoice-print-content" class="space-y-4 border border-slate-200 p-4 sm:p-5 rounded-2xl bg-white text-slate-800">
@@ -536,23 +522,38 @@
             const syncIcon = document.getElementById('sync-icon'); const syncText = document.getElementById('sync-text'); const syncDot = document.getElementById('sync-dot');
             if (syncIcon) syncIcon.classList.add('animate-spin'); if (syncText) syncText.textContent = 'جاري المزامنة...'; if (syncDot) syncDot.className = 'w-2 h-2 rounded-full bg-blue-400 animate-pulse';
             try {
-                const response = await fetch(url); const result = await response.json(); if (!response.ok || result.status !== 'success' || !result.data) throw new Error(result.message || 'تعذر قراءة البيانات');
+                const response = await fetch(url); const result = await response.json();
+                if (!response.ok || result.status !== 'success' || !result.data) throw new Error(result.message || 'تعذر قراءة البيانات');
                 const localSnapshot = JSON.parse(JSON.stringify(appData)); const cloud = result.data;
+                const safeArray = (key) => {
+                    const cloudArr = Array.isArray(cloud[key]) ? cloud[key] : null;
+                    const localArr = Array.isArray(localSnapshot[key]) ? localSnapshot[key] : [];
+                    if ((!cloudArr || cloudArr.length === 0) && localArr.length > 0) return localArr;
+                    return cloudArr || localArr;
+                };
                 const cloudHasData = ['parts','sales','expenses','supplierPayments','services','capitalInjections'].some(k => Array.isArray(cloud[k]) && cloud[k].length);
                 const localHasData = ['parts','sales','expenses','supplierPayments','services','capitalInjections'].some(k => Array.isArray(localSnapshot[k]) && localSnapshot[k].length);
                 if (!cloudHasData && localHasData) { await pushToCloud(); }
                 else {
                     const localSalesById = new Map((localSnapshot.sales || []).map(x => [String(x.id), x]));
-                    appData.parts = cloud.parts || [];
-                    appData.sales = (cloud.sales || []).map(sale => {
-                        const local = localSalesById.get(String(sale.id)) || {};
-                        return { ...sale, invoiceId: local.invoiceId || sale.invoiceId || ('LEGACY-' + sale.id), maintenanceFee: Number(sale.maintenanceFee) || Number(local.maintenanceFee) || 0, location: sale.location || local.location || '',
-                            invoiceTotal: (sale.invoiceTotal !== null && sale.invoiceTotal !== undefined && sale.invoiceTotal !== '') ? Number(sale.invoiceTotal) : ((local.invoiceTotal !== undefined && local.invoiceTotal !== null) ? Number(local.invoiceTotal) : undefined),
-                            serviceType: sale.serviceType || local.serviceType || '', serviceProvided: sale.serviceProvided || local.serviceProvided || ''
-                        };
-                    });
-                    appData.expenses = cloud.expenses || []; appData.supplierPayments = cloud.supplierPayments || []; appData.services = cloud.services || []; appData.capitalInjections = cloud.capitalInjections || [];
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(appData)); if (localSalesById.size) await pushToCloud();
+                    appData.parts = safeArray('parts');
+                    appData.expenses = safeArray('expenses');
+                    appData.supplierPayments = safeArray('supplierPayments');
+                    appData.services = safeArray('services');
+                    appData.capitalInjections = safeArray('capitalInjections');
+                    const cloudSales = Array.isArray(cloud.sales) ? cloud.sales : [];
+                    if (cloudSales.length === 0 && (localSnapshot.sales || []).length > 0) { appData.sales = localSnapshot.sales; }
+                    else {
+                        appData.sales = cloudSales.map(sale => {
+                            const local = localSalesById.get(String(sale.id)) || {};
+                            return { ...sale, invoiceId: local.invoiceId || sale.invoiceId || ('LEGACY-' + sale.id), maintenanceFee: Number(sale.maintenanceFee) || Number(local.maintenanceFee) || 0, location: sale.location || local.location || '',
+                                invoiceTotal: (sale.invoiceTotal !== null && sale.invoiceTotal !== undefined && sale.invoiceTotal !== '') ? Number(sale.invoiceTotal) : ((local.invoiceTotal !== undefined && local.invoiceTotal !== null) ? Number(local.invoiceTotal) : undefined),
+                                serviceType: sale.serviceType || local.serviceType || '', serviceProvided: sale.serviceProvided || local.serviceProvided || ''
+                            };
+                        });
+                    }
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+                    if (localSalesById.size || (localSnapshot.expenses||[]).length || (localSnapshot.capitalInjections||[]).length) { await pushToCloud(); }
                 }
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(appData)); renderAll(); if (showNotification) showToast('تمت المزامنة وتحديث البيانات بنجاح!', 'success');
             } catch (error) {
@@ -581,14 +582,13 @@
             appData.supplierPayments.forEach(pay => { totalSupplierPaid += Number(pay.amount || 0); });
             let invValue = 0, invCount = 0;
             appData.parts.forEach(p => { const rem = Math.max(0, p.initialQty - p.soldQty); invCount += rem; invValue += (rem * p.costPrice); });
-            // رأس المال: بيزود الخزنة، ومش بيأثر على الربح
             const totalCapitalIn = (appData.capitalInjections || []).reduce((s, c) => s + Number(c.amount || 0), 0);
             const netProfit = (totalPartsProfit + totalMaint) - totalExp; const totalIncome = totalPartsRev + totalMaint; const cashDrawer = totalIncome + totalCapitalIn - totalExp - totalSupplierPaid;
             document.getElementById('dash-cash-drawer').textContent = formatMoney(cashDrawer);
             document.getElementById('dash-net-profit-sub').textContent = formatMoney(netProfit);
             document.getElementById('dash-capital-recovered').textContent = formatMoney(totalCapitalRec);
             document.getElementById('dash-inventory-value').textContent = formatMoney(invValue);
-            document.getElementById('dash-capital-in').textContent = formatMoney(totalCapitalIn);
+            const capEl = document.getElementById('dash-capital-in'); if (capEl) capEl.textContent = formatMoney(totalCapitalIn);
             document.getElementById('dash-inventory-count').textContent = formatNumber(invCount);
             document.getElementById('dash-expenses').textContent = formatMoney(totalExp);
             document.getElementById('dash-total-sales').textContent = formatMoney(totalIncome);
@@ -664,19 +664,83 @@
         }
 
         function openCustomerDetail(cName) {
-            selectedCustomerDetail = cName; const records = appData.sales.filter(s => (s.customer || 'عميل نقدي').trim() === cName); if (records.length === 0) return;
-            let totalParts = 0, totalMaint = 0, totalProfit = 0, phone = ''; const tbody = document.getElementById('detail-cust-history-body'); tbody.innerHTML = '';
-            records.sort((a, b) => parseDateForSort(b.date) - parseDateForSort(a.date)).forEach(r => {
-                if (r.phone) phone = r.phone; const pRev = (r.invoiceTotal !== undefined && r.invoiceTotal !== null && r.invoiceTotal !== '') ? (Number(r.invoiceTotal)||0) : (Number(r.qty)||0)*(Number(r.salePrice)||0);
-                const pCost = (Number(r.qty) || 0) * (Number(r.costPrice) || 0); const maint = Number(r.maintenanceFee) || 0;
-                totalParts += pRev; totalMaint += maint; totalProfit += (pRev - pCost) + maint;
-                const tr = document.createElement('tr'); tr.className = 'hover:bg-slate-50 border-b border-slate-100';
-                tr.innerHTML = `<td data-label="التاريخ" class="py-2.5 px-3 text-xs font-mono text-slate-600 whitespace-nowrap" dir="ltr">${formatDisplayDate(r.date)}</td><td data-label="البيان" class="py-2.5 px-3 font-bold text-xs">${r.partName || '<span class="text-indigo-600">خدمة صيانة</span>'}</td><td data-label="الكمية" class="py-2.5 px-3 text-center font-mono text-xs">${r.partName ? formatNumber(r.qty) : '-'}</td><td data-label="المستحق" class="py-2.5 px-3 font-mono text-xs text-blue-700">${formatMoney(pRev + maint)}</td><td data-label="تكلفة" class="py-2.5 px-3 font-mono text-xs text-indigo-700 font-bold">${formatMoney(pCost)}</td><td data-label="الإجمالي" class="py-2.5 px-3 font-mono text-xs font-extrabold">${formatMoney(pRev + maint)}</td><td data-label="ملاحظات" class="py-2.5 px-3 text-xs text-slate-500">${r.notes || '-'}</td>`;
-                tbody.appendChild(tr);
+            selectedCustomerDetail = cName;
+            const records = appData.sales.filter(s => (s.customer || 'عميل نقدي').trim() === cName);
+            if (records.length === 0) return;
+
+            const invoiceMap = new Map();
+            records.forEach(r => {
+                const invId = r.invoiceId || ('LEGACY-' + r.id);
+                if (!invoiceMap.has(invId)) invoiceMap.set(invId, []);
+                invoiceMap.get(invId).push(r);
             });
-            document.getElementById('detail-cust-name').textContent = cName; document.getElementById('detail-cust-phone').textContent = phone || 'بدون رقم هاتف';
-            document.getElementById('detail-cust-total').textContent = formatMoney(totalParts + totalMaint); document.getElementById('detail-cust-maint').textContent = formatMoney(totalMaint);
-            document.getElementById('detail-cust-parts').textContent = formatMoney(totalParts); document.getElementById('detail-cust-profit').textContent = formatMoney(totalProfit);
+
+            let totalPaid = 0, totalPartsCost = 0, phone = '';
+            const cardsContainer = document.getElementById('detail-cust-history-body');
+            cardsContainer.innerHTML = '';
+
+            const sortedInvoices = [...invoiceMap.entries()].sort((a, b) => {
+                const dateA = parseDateForSort(a[1][0].date);
+                const dateB = parseDateForSort(b[1][0].date);
+                return dateB - dateA;
+            });
+
+            sortedInvoices.forEach(([invId, invRecords]) => {
+                const first = invRecords[0];
+                if (first.phone) phone = first.phone;
+
+                const invoiceTotal = invoiceTotalForRecords(invRecords);
+                const partsCost = invRecords.reduce((sum, r) => sum + (Number(r.qty) || 0) * (Number(r.costPrice) || 0), 0);
+                totalPaid += invoiceTotal;
+                totalPartsCost += partsCost;
+
+                const partsList = invRecords.filter(r => r.partName && Number(r.qty) > 0);
+
+                const card = document.createElement('div');
+                card.className = 'bg-white border border-slate-200 rounded-xl p-3 text-xs space-y-2';
+
+                let partsHTML = '';
+                if (partsList.length) {
+                    partsHTML = partsList.map(p => {
+                        const lineCost = (Number(p.qty) || 0) * (Number(p.costPrice) || 0);
+                        const qtyText = Number(p.qty) > 1 ? ` (×${formatNumber(p.qty)})` : '';
+                        return `<div class="flex justify-between items-center gap-2 py-0.5"><span class="text-slate-700">• ${escapeHtml(p.partName)}${qtyText}</span><span class="font-mono font-bold text-slate-800 whitespace-nowrap">${formatMoney(lineCost)}</span></div>`;
+                    }).join('');
+                } else {
+                    partsHTML = '<div class="text-slate-400 text-[11px]">لا توجد قطع غيار</div>';
+                }
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-center border-b pb-1.5">
+                        <span class="font-extrabold text-blue-700 font-mono text-[11px]" dir="ltr">${escapeHtml(invId)}</span>
+                        <span class="text-slate-500 font-mono text-[11px]" dir="ltr">${formatDisplayDate(first.date)}</span>
+                    </div>
+                    <div class="space-y-0.5">
+                        <div class="text-slate-700"><span class="text-slate-400">🔧</span> ${escapeHtml(first.serviceType || 'صيانة عامة')}</div>
+                        ${first.serviceProvided ? `<div class="text-slate-700"><span class="text-slate-400">📝</span> ${escapeHtml(first.serviceProvided)}</div>` : ''}
+                        ${first.location ? `<div class="text-slate-700"><span class="text-slate-400">📍</span> ${escapeHtml(first.location)}</div>` : ''}
+                        ${first.phone ? `<div class="text-slate-700 font-mono" dir="ltr"><span class="text-slate-400">📞</span> ${escapeHtml(first.phone)}</div>` : ''}
+                    </div>
+                    <div class="bg-slate-50 rounded-lg p-2 space-y-1">
+                        <div class="text-[10px] font-bold text-slate-500 mb-1">قطع الغيار:</div>
+                        ${partsHTML}
+                    </div>
+                    <div class="border-t pt-1.5 space-y-0.5">
+                        <div class="flex justify-between text-[11px]"><span class="text-slate-500">إجمالي القطع:</span><span class="font-mono font-bold text-indigo-700">${formatMoney(partsCost)}</span></div>
+                        <div class="flex justify-between text-xs"><span class="font-bold text-slate-700">إجمالي الفاتورة:</span><span class="font-mono font-extrabold text-slate-900">${formatMoney(invoiceTotal)}</span></div>
+                    </div>
+                    ${first.notes ? `<div class="text-[11px] text-slate-500 bg-amber-50 rounded-lg p-2 border border-amber-100">📌 ${escapeHtml(first.notes)}</div>` : ''}
+                `;
+                cardsContainer.appendChild(card);
+            });
+
+            const netProfit = totalPaid - totalPartsCost;
+
+            document.getElementById('detail-cust-name').textContent = cName;
+            document.getElementById('detail-cust-phone').textContent = phone || 'بدون رقم هاتف';
+            document.getElementById('detail-cust-total').textContent = formatMoney(totalPaid);
+            document.getElementById('detail-cust-parts').textContent = formatMoney(totalPartsCost);
+            document.getElementById('detail-cust-profit').textContent = formatMoney(netProfit);
             document.getElementById('customer-detail-panel').classList.remove('hidden');
         }
 
@@ -730,7 +794,6 @@
             lucide.createIcons();
         }
 
-        // عرض قائمة إيداعات رأس المال
         function renderCapitalList() {
             const list = document.getElementById('capital-list'); if (!list) return;
             const items = [...(appData.capitalInjections || [])].sort((a, b) => parseDateForSort(b.date) - parseDateForSort(a.date));
@@ -882,7 +945,6 @@
 
         document.getElementById('form-expense').addEventListener('submit', function(e) { e.preventDefault(); const title = document.getElementById('exp-title').value.trim(); const amount = Number(document.getElementById('exp-amount').value) || 0; const date = document.getElementById('exp-date').value; if (!title || amount <= 0) return; appData.expenses.push({ id: generateId(), title, amount, date }); saveData(); this.reset(); setTodayDates(); showToast('تم تسجيل المصروف', 'success'); });
 
-        // فورم إيداع رأس المال الجديد
         document.getElementById('form-capital').addEventListener('submit', function(e) {
             e.preventDefault();
             const title = document.getElementById('cap-title').value.trim();
